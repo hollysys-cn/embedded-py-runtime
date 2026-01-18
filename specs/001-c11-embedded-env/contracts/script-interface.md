@@ -189,14 +189,106 @@ build.sh [OPTIONS] [TARGET]
 ```
 
 **构建锁机制**:
-- 检查 `build/.build.lock` 文件
-- 如果存在且进程仍在运行，拒绝启动新构建
-- 构建完成或失败时自动删除锁文件
-- 支持 `--force` 选项强制删除过期锁
+- **锁文件位置**: `build/.build.lock`
+- **锁文件格式**: JSON，包含 `{"pid": 12345, "timestamp": "2026-01-18T14:30:00Z", "hostname": "dev-machine"}`
+- **锁获取流程**:
+  1. 检查锁文件是否存在
+  2. 如果存在，读取 PID 并验证进程是否运行（Linux/macOS: 检查 `/proc/$PID`，Windows: 使用 `tasklist`）
+  3. 如果进程仍在运行，输出错误并返回退出码 10
+  4. 如果进程已终止或锁文件超时（>1小时），清理过期锁
+  5. 创建新锁文件，写入当前 PID、时间戳和主机名
+- **锁释放流程**:
+  1. 构建完成或失败时自动删除锁文件
+  2. 使用 `trap` 捕获 EXIT/INT/TERM 信号确保锁释放
+- **超时策略**: 锁文件存在超过 1 小时且 PID 无效时，视为过期锁自动清理
+- **强制选项**: `--force` 跳过锁检查，强制删除现有锁（谨慎使用）
+- **并发安全**: 使用文件系统原子操作（`flock` 或 `ln -s`）防止竞态条件
 
 ---
 
-## 5. 清理脚本
+## 5. 构建锁管理脚本
+
+### lock-manager.sh
+
+**用途**: 管理构建锁文件，防止并发构建冲突
+
+**位置**: `.specify/scripts/build/lock-manager.sh`
+
+**接口**:
+
+```bash
+lock-manager.sh <COMMAND> [OPTIONS]
+```
+
+**命令**:
+- `acquire`: 尝试获取构建锁
+- `release`: 释放构建锁
+- `check`: 检查锁状态（不修改）
+- `clean`: 清理过期锁
+
+**选项**:
+- `--timeout <SECONDS>`: 等待锁的超时时间（默认 0，立即失败）
+- `--force`: 强制清理锁（忽略 PID 检查）
+
+**退出码**:
+- `0`: 成功（acquire 成功获取锁，release 成功释放，check 锁不存在或已过期）
+- `1`: 失败（acquire 锁已被占用，release 锁不存在）
+- `2`: 参数错误
+
+**锁文件格式** (`build/.build.lock`):
+```json
+{
+  "pid": 12345,
+  "timestamp": "2026-01-18T14:30:00Z",
+  "hostname": "dev-machine",
+  "username": "developer",
+  "command": "build.sh --config Debug"
+}
+```
+
+**行为规范**:
+1. **获取锁 (acquire)**:
+   - 检查锁文件是否存在
+   - 如果存在，验证 PID：
+     - Linux/macOS: 检查 `/proc/$PID/cmdline` 或使用 `ps -p $PID`
+     - Windows: 使用 `tasklist /FI "PID eq $PID"`
+   - 如果 PID 有效且时间戳 <1 小时，返回失败（退出码 1）
+   - 如果 PID 无效或时间戳 >1 小时，清理过期锁
+   - 创建新锁文件（原子操作）
+
+2. **释放锁 (release)**:
+   - 验证锁文件存在且 PID 匹配当前进程
+   - 删除锁文件
+
+3. **检查锁 (check)**:
+   - 输出锁状态（存在/不存在/过期）
+   - 如果存在，显示 PID、时间戳和主机名
+
+4. **清理锁 (clean)**:
+   - 扫描所有锁文件
+   - 清理无效 PID 或超时的锁
+
+**标准输出**:
+```
+# acquire 成功
+[INFO] 构建锁已获取 (PID: 12345)
+
+# acquire 失败
+[ERROR] 构建正在进行中
+  PID: 23456
+  启动时间: 2026-01-18 14:25:00
+  主机: dev-machine
+  用户: developer
+
+# check
+[INFO] 锁状态: 已锁定
+  PID: 12345 (运行中)
+  持续时间: 15 分钟
+```
+
+---
+
+## 6. 清理脚本
 
 ### clean.sh
 

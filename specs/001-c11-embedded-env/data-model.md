@@ -193,7 +193,29 @@
       "size_bytes": 34816
     }
   },
-  "last_error": null
+  "last_error": {
+    "code": 2,
+    "message": "Compilation failed: undefined reference to 'main'",
+    "file": "src/main.c",
+    "line": 42,
+    "timestamp": "2026-01-18T14:35:12Z",
+    "log_file": "build/logs/error.log"
+  },
+  "error_log": {
+    "format": "jsonlines",
+    "path": "build/logs/error.log",
+    "retention_policy": "keep_last_10_builds",
+    "max_size_mb": 100,
+    "fields": [
+      "timestamp",
+      "level",
+      "phase",
+      "file",
+      "line",
+      "message",
+      "context"
+    ]
+  }
 }
 ```
 
