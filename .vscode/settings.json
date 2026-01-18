@@ -9,6 +9,21 @@
     "chat.tools.terminal.autoApprove": {
         ".specify/scripts/bash/": true,
         ".specify/scripts/powershell/": true
-    }
+    },
+    "files.eol": "\n",
+    "files.trimTrailingWhitespace": true,
+    "github.copilot.chat.commitMessageGeneration.instructions": [
+        {
+            "text": "使用约定式提交(Conventional Commits)格式."
+        },
+        {
+            "text": "只总结暂存的更改,若没有则不生成提交信息."
+        },
+        {
+            "text": "保持信息简洁明了."
+        }
+    ],
+    "chat.agent.maxRequests": 100,
+    "terminal.integrated.defaultProfile.windows": "Git Bash"
 }
 
