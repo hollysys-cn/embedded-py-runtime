@@ -111,12 +111,21 @@ test_cortex_m4_support() {
 
     log_info "测试 Cortex-M4 支持..."
 
-    # 检查 --target-help 输出
-    if "$gcc" --target-help 2>/dev/null | grep -q "cortex-m4"; then
+    # 创建临时测试文件
+    local test_file
+    test_file="$(mktemp --suffix=.c)"
+    trap 'rm -f "$test_file" "${test_file%.c}.o"' RETURN
+
+    cat > "$test_file" << 'EOF'
+int main(void) { return 0; }
+EOF
+
+    # 尝试为 Cortex-M4 编译
+    if "$gcc" -mcpu=cortex-m4 -mthumb -c "$test_file" -o "${test_file%.c}.o" 2>/dev/null; then
         log_success "Cortex-M4 支持: 已启用"
         return 0
     else
-        log_error "Cortex-M4 支持: 未找到"
+        log_error "Cortex-M4 支持: 编译失败"
         return 1
     fi
 }
@@ -185,6 +194,10 @@ main() {
 
     # 验证每个可执行文件
     while IFS= read -r line; do
+        # 移除可能的回车符和空白
+        line="$(echo "$line" | tr -d '\r' | xargs)"
+        [[ -z "$line" ]] && continue
+
         local name="${line%%=*}"
         local path="${line#*=}"
         local full_path="$full_install_path/$path"

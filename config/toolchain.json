@@ -17,21 +17,21 @@
       "sha256": "fb613dacbc7d0c4a7a35ee4a8c3a1ae151f1b2f81e5e981b5cc32d3ecc75bbe2",
       "mirrors": []
     },
-    "win32": {
+    "win32-x86_64": {
       "url": "https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-win32.zip",
-      "sha256": "2383e4eb4ea23f248d33adc70dc3227e5f8323e913d9d08428ddd933e93edbd",
+      "sha256": "d287439b3090843f3f4e29c7c41f81d958a5323aecefcf705c203bfd8ae3f2e7",
       "mirrors": []
     }
   },
   "install_path": ".toolchain/gcc-arm-none-eabi",
   "executables": {
-    "gcc": "bin/arm-none-eabi-gcc",
-    "g++": "bin/arm-none-eabi-g++",
-    "as": "bin/arm-none-eabi-as",
-    "ld": "bin/arm-none-eabi-ld",
-    "objcopy": "bin/arm-none-eabi-objcopy",
-    "objdump": "bin/arm-none-eabi-objdump",
-    "size": "bin/arm-none-eabi-size",
-    "gdb": "bin/arm-none-eabi-gdb"
+    "gcc": "bin/arm-none-eabi-gcc.exe",
+    "g++": "bin/arm-none-eabi-g++.exe",
+    "as": "bin/arm-none-eabi-as.exe",
+    "ld": "bin/arm-none-eabi-ld.exe",
+    "objcopy": "bin/arm-none-eabi-objcopy.exe",
+    "objdump": "bin/arm-none-eabi-objdump.exe",
+    "size": "bin/arm-none-eabi-size.exe",
+    "gdb": "bin/arm-none-eabi-gdb.exe"
   }
 }
