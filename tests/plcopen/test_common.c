@@ -226,3 +226,38 @@ int main(void) {
 
     return UNITY_END();
 }
+
+/**
+ * @brief 运行 common 模块所有测试（供测试运行器调用）
+ *
+ * @details
+ * 本函数供 test_runner.c 调用，执行所有基础功能层测试。
+ * 无需初始化/结束 Unity，由调用者管理。
+ */
+void run_test_common(void) {
+    /* 溢出检测测试 */
+    RUN_TEST(test_check_overflow_normal_values);
+    RUN_TEST(test_check_overflow_nan);
+    RUN_TEST(test_check_overflow_inf);
+
+    /* 除零保护测试 */
+    RUN_TEST(test_safe_divide_normal);
+    RUN_TEST(test_safe_divide_by_zero);
+    RUN_TEST(test_safe_divide_near_zero);
+    RUN_TEST(test_safe_divide_by_negative_zero);
+
+    /* NaN 检测测试 */
+    RUN_TEST(test_check_nan_function);
+
+    /* Inf 检测测试 */
+    RUN_TEST(test_check_inf_function);
+
+    /* NaN/Inf 组合检测测试 */
+    RUN_TEST(test_check_nan_inf_function);
+
+    /* 限幅函数测试 */
+    RUN_TEST(test_clamp_output_within_range);
+    RUN_TEST(test_clamp_output_above_max);
+    RUN_TEST(test_clamp_output_below_min);
+    RUN_TEST(test_clamp_output_boundary_values);
+}

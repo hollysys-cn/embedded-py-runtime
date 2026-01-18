@@ -49,7 +49,7 @@
 - [X] T010 [P] 实现 NaN/Inf 检测函数 check_nan_inf() 在 src/plcopen/common.c
 - [X] T011 [P] 实现输出限幅函数 clamp_output() 在 src/plcopen/common.c
 - [X] T012 为 common.c 创建单元测试 tests/plcopen/test_common.c：测试溢出检测（输入 FLT_MAX * 2）、除零保护（分母 0 和 1e-6）、NaN 检测（0.0/0.0）、Inf 检测（1.0/0.0）、限幅函数
-- [ ] T013 创建 Unity 测试运行器 tests/plcopen/test_runner.c
+- [X] T013 创建 Unity 测试运行器 tests/plcopen/test_runner.c
 - [ ] T014 验证基础功能层：编译并运行 test_common.c，确保所有数值保护函数测试通过（覆盖率 > 90%）
 
 **检查点**: 基础功能层就绪 - 用户故事实现现在可以并行开始
@@ -76,7 +76,7 @@
 - [X] T020 [US1] 实现 FB_PID_SetManual() 手动模式切换函数在 src/plcopen/fb_pid.c
 - [X] T021 [US1] 实现 FB_PID_SetAuto() 自动模式切换函数（无扰切换）在 src/plcopen/fb_pid.c
 - [X] T022 [US1] 实现首次调用处理：使用首次测量值作为初始输出在 FB_PID_Execute() 中
-- [ ] T023 [US1] 创建 PID 功能块单元测试 tests/plcopen/test_fb_pid.c：
+- [X] T023 [US1] 创建 PID 功能块单元测试 tests/plcopen/test_fb_pid.c：
   - 测试配置验证：无效 sample_time（<=0 或 >1000s）、out_max <= out_min、int_max <= int_min、负增益参数
   - 测试阶跃响应（收敛性和稳态误差）
   - 测试积分抗饱和（双向条件积分法：上限停止正积分，下限停止负积分）
@@ -85,7 +85,7 @@
   - 测试首次调用行为（使用首次测量值作为初始输出）
 - [X] T024 [US1] 创建 PID 控制演示程序 examples/plcopen/pid_control_demo/main.c（模拟一阶惯性系统的闭环控制）
 - [X] T025 [US1] 创建 PID 演示程序构建配置 examples/plcopen/pid_control_demo/CMakeLists.txt
-- [ ] T026 [US1] 创建 PID 状态码测试 tests/plcopen/test_fb_pid.c：验证所有状态码输出（FB_STATUS_OK, FB_STATUS_LIMIT_HI, FB_STATUS_LIMIT_LO, FB_STATUS_ERROR_NAN, FB_STATUS_ERROR_INF）
+- [X] T026 [US1] 创建 PID 状态码测试 tests/plcopen/test_fb_pid.c：验证所有状态码输出（FB_STATUS_OK, FB_STATUS_LIMIT_HI, FB_STATUS_LIMIT_LO, FB_STATUS_ERROR_NAN, FB_STATUS_ERROR_INF）
 - [ ] T027 [US1] 验证 User Story 1：编译并运行所有 PID 测试，执行演示程序，确认控制性能达标
 
 **检查点**: 此时 User Story 1 应完全功能正常且可独立测试
@@ -108,7 +108,7 @@
   - 使用前向欧拉离散化：alpha = Ts/(τ+Ts)
   - 更新公式：output = output + alpha * (input - output)
   - 首次运行：output = input（无跳变启动）
-- [ ] T032 [US2] 创建 PT1 功能块单元测试 tests/plcopen/test_fb_pt1.c：
+- [X] T032 [US2] 创建 PT1 功能块单元测试 tests/plcopen/test_fb_pt1.c：
   - 测试配置验证：time_constant < 1e-6、sample_time <= 0 或 > 1000s
   - 测试阶跃响应（1τ 达到 63.2%，3τ 达到 95%）
   - 测试高频噪声抑制
@@ -282,9 +282,9 @@
 - [X] T072 [P] 更新 include/plcopen/plcopen.h 主头文件，包含所有 7 个功能块头文件
 - [X] T073 [P] 创建综合系统演示程序 examples/plcopen/full_system_demo/main.c（展示 PID + PT1 + RAMP 协同工作）
 - [X] T074 [P] 创建综合演示程序构建配置 examples/plcopen/full_system_demo/CMakeLists.txt
-- [ ] T075 创建性能基准测试 tests/plcopen/test_performance.c（测量每个功能块执行时间，目标 < 10μs）
+- [X] T075 创建性能基准测试 tests/plcopen/test_performance.c（测量每个功能块执行时间，目标 < 10μs）
 - [ ] T076 运行性能基准测试，生成性能报告 docs/002-performance-report.md
-- [ ] T077 验证内存占用：检查编译后的库大小（目标 Flash < 50KB, RAM < 2KB）
+- [X] T077 验证内存占用：检查编译后的库大小（目标 Flash < 50KB, RAM < 2KB）
 - [ ] T078 [P] 创建用户手册 docs/plcopen-user-manual-zh.md（中文，包含所有功能块使用说明）
 - [ ] T079 [P] 为所有源文件添加 Doxygen 格式的 API 文档注释
 - [ ] T080 [P] 生成 Doxygen API 文档（如果配置了 Doxygen）
