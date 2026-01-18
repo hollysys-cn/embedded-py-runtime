@@ -45,7 +45,7 @@ docker run --rm \
         find . -name '*.gcno' -delete
 
         # 编译带覆盖率的 common 测试
-        echo '[1/3] 编译 common 测试...'
+        echo '[1/8] 编译 common 测试...'
         gcc -std=c11 -Wall -Wextra --coverage -fprofile-arcs -ftest-coverage \
             -I./include -I./.toolchain/unity/src \
             src/plcopen/common.c \
@@ -54,7 +54,7 @@ docker run --rm \
             -lm -o build/coverage/test_common
 
         # 编译带覆盖率的 PID 测试
-        echo '[2/3] 编译 PID 测试...'
+        echo '[2/8] 编译 PID 测试...'
         gcc -std=c11 -Wall -Wextra --coverage -fprofile-arcs -ftest-coverage \
             -I./include -I./.toolchain/unity/src \
             src/plcopen/common.c \
@@ -64,7 +64,7 @@ docker run --rm \
             -lm -o build/coverage/test_fb_pid
 
         # 编译带覆盖率的 PT1 测试
-        echo '[3/3] 编译 PT1 测试...'
+        echo '[3/8] 编译 PT1 测试...'
         gcc -std=c11 -Wall -Wextra --coverage -fprofile-arcs -ftest-coverage \
             -I./include -I./.toolchain/unity/src \
             src/plcopen/common.c \
@@ -73,32 +73,99 @@ docker run --rm \
             .toolchain/unity/src/unity.c \
             -lm -o build/coverage/test_fb_pt1
 
+        # 编译带覆盖率的 Deadband 测试
+        echo '[4/8] 编译 Deadband 测试...'
+        gcc -std=c11 -Wall -Wextra --coverage -fprofile-arcs -ftest-coverage \
+            -I./include -I./.toolchain/unity/src \
+            src/plcopen/common.c \
+            src/plcopen/fb_deadband.c \
+            tests/plcopen/test_fb_deadband.c \
+            .toolchain/unity/src/unity.c \
+            -lm -o build/coverage/test_fb_deadband
+
+        # 编译带覆盖率的 Derivative 测试
+        echo '[5/8] 编译 Derivative 测试...'
+        gcc -std=c11 -Wall -Wextra --coverage -fprofile-arcs -ftest-coverage \
+            -I./include -I./.toolchain/unity/src \
+            src/plcopen/common.c \
+            src/plcopen/fb_derivative.c \
+            tests/plcopen/test_fb_derivative.c \
+            .toolchain/unity/src/unity.c \
+            -lm -o build/coverage/test_fb_derivative
+
+        # 编译带覆盖率的 Integrator 测试
+        echo '[6/8] 编译 Integrator 测试...'
+        gcc -std=c11 -Wall -Wextra --coverage -fprofile-arcs -ftest-coverage \
+            -I./include -I./.toolchain/unity/src \
+            src/plcopen/common.c \
+            src/plcopen/fb_integrator.c \
+            tests/plcopen/test_fb_integrator.c \
+            .toolchain/unity/src/unity.c \
+            -lm -o build/coverage/test_fb_integrator
+
+        # 编译带覆盖率的 Limit 测试
+        echo '[7/8] 编译 Limit 测试...'
+        gcc -std=c11 -Wall -Wextra --coverage -fprofile-arcs -ftest-coverage \
+            -I./include -I./.toolchain/unity/src \
+            src/plcopen/common.c \
+            src/plcopen/fb_limit.c \
+            tests/plcopen/test_fb_limit.c \
+            .toolchain/unity/src/unity.c \
+            -lm -o build/coverage/test_fb_limit
+
+        # 编译带覆盖率的 Ramp 测试
+        echo '[8/8] 编译 Ramp 测试...'
+        gcc -std=c11 -Wall -Wextra --coverage -fprofile-arcs -ftest-coverage \
+            -I./include -I./.toolchain/unity/src \
+            src/plcopen/common.c \
+            src/plcopen/fb_ramp.c \
+            tests/plcopen/test_fb_ramp.c \
+            .toolchain/unity/src/unity.c \
+            -lm -o build/coverage/test_fb_ramp
+
         echo ''
         echo '=== 运行测试 ==='
 
-        echo '[1/3] 运行 common 测试...'
         cd build/coverage
-        ./test_common > /dev/null 2>&1
-        echo '✅ common: 14 tests passed'
 
-        echo '[2/3] 运行 PID 测试...'
-        ./test_fb_pid > /dev/null 2>&1
-        echo '✅ PID: 18 tests passed'
+        echo '[1/8] 运行 common 测试...'
+        ./test_common > /dev/null 2>&1 && echo '✅ common: 14 tests passed' || echo '⚠️ common: 测试失败'
 
-        echo '[3/3] 运行 PT1 测试...'
-        ./test_fb_pt1 > /dev/null 2>&1
-        echo '✅ PT1: 10 tests passed'
+        echo '[2/8] 运行 PID 测试...'
+        ./test_fb_pid > /dev/null 2>&1 && echo '✅ PID: 18 tests passed' || echo '⚠️ PID: 测试失败'
+
+        echo '[3/8] 运行 PT1 测试...'
+        ./test_fb_pt1 > /dev/null 2>&1 && echo '✅ PT1: 10 tests passed' || echo '⚠️ PT1: 测试失败'
+
+        echo '[4/8] 运行 Deadband 测试...'
+        ./test_fb_deadband > /dev/null 2>&1 && echo '✅ Deadband: 测试通过' || echo '⚠️ Deadband: 测试失败'
+
+        echo '[5/8] 运行 Derivative 测试...'
+        ./test_fb_derivative > /dev/null 2>&1 && echo '✅ Derivative: 测试通过' || echo '⚠️ Derivative: 测试失败'
+
+        echo '[6/8] 运行 Integrator 测试...'
+        ./test_fb_integrator > /dev/null 2>&1 && echo '✅ Integrator: 测试通过' || echo '⚠️ Integrator: 测试失败'
+
+        echo '[7/8] 运行 Limit 测试...'
+        ./test_fb_limit > /dev/null 2>&1 && echo '✅ Limit: 测试通过' || echo '⚠️ Limit: 测试失败'
+
+        echo '[8/8] 运行 Ramp 测试...'
+        ./test_fb_ramp > /dev/null 2>&1 && echo '✅ Ramp: 测试通过' || echo '⚠️ Ramp: 测试失败'
 
         echo ''
         echo '=== 生成覆盖率报告 ==='
         cd /workspace
-        gcovr -r . \
+
+        # gcovr 需要在编译目录运行以找到 .gcda 文件
+        gcovr build/coverage \
+            --root . \
             --html-details build/coverage/coverage.html \
             --txt build/coverage/coverage.txt \
             --exclude '.toolchain/*' \
             --exclude 'tests/*' \
             --exclude 'examples/*' \
-            --exclude 'templates/*'
+            --exclude 'templates/*' \
+            --object-directory build/coverage
 
         echo ''
         echo '覆盖率报告已生成:'
