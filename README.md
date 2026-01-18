@@ -36,6 +36,30 @@
 source ./scripts/setup/configure-environment.sh
 ```
 
+### ✅ PLCopen 基础功能块库
+
+符合 PLCopen 标准的工业控制功能块库，提供 7 个基础控制算法模块。
+
+- **PID 控制器**: 微分项先行、条件积分法抗饱和、手自动切换
+- **PT1 滤波器**: 一阶惯性滤波，信号平滑和噪声抑制
+- **其他功能块**: RAMP、LIMIT、DEADBAND、INTEGRATOR、DERIVATIVE
+- **工业级特性**: 完整数值保护、零动态内存、高性能（~3KB 代码）
+
+📖 **详细文档**: [docs/plcopen-README.md](docs/plcopen-README.md)
+📊 **构建报告**: [docs/BUILD_REPORT_002.md](docs/BUILD_REPORT_002.md)
+
+**快速开始**:
+```bash
+# 配置环境（如未配置）
+source ./scripts/setup/configure-environment.sh
+
+# 构建库
+./scripts/build/build-plcopen.sh
+
+# 使用示例
+# arm-none-eabi-gcc -o app.elf main.c build/libplcopen.a -lm
+```
+
 ### 🔄 未来功能
 
 更多功能模块正在开发中...
