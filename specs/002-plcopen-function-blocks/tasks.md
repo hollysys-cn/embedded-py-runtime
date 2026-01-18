@@ -48,9 +48,9 @@
 - [ ] T009 [P] 实现除零保护函数 safe_divide() 在 src/plcopen/common.c（使用 1e-6 最小值）
 - [ ] T010 [P] 实现 NaN/Inf 检测函数 check_nan_inf() 在 src/plcopen/common.c
 - [ ] T011 [P] 实现输出限幅函数 clamp_output() 在 src/plcopen/common.c
-- [ ] T012 为 common.c 创建单元测试 tests/plcopen/test_common.c
+- [ ] T012 为 common.c 创建单元测试 tests/plcopen/test_common.c：测试溢出检测（输入 FLT_MAX * 2）、除零保护（分母 0 和 1e-6）、NaN 检测（0.0/0.0）、Inf 检测（1.0/0.0）、限幅函数
 - [ ] T013 创建 Unity 测试运行器 tests/plcopen/test_runner.c
-- [ ] T014 验证基础功能层：编译并运行 test_common.c，确保所有数值保护函数测试通过
+- [ ] T014 验证基础功能层：编译并运行 test_common.c，确保所有数值保护函数测试通过（覆盖率 > 90%）
 
 **检查点**: 基础功能层就绪 - 用户故事实现现在可以并行开始
 
@@ -67,7 +67,7 @@
 - [ ] T015 [P] [US1] 定义 FB_PID_Config_t 配置结构体在 include/plcopen/fb_pid.h
 - [ ] T016 [P] [US1] 定义 FB_PID_State_t 状态结构体在 include/plcopen/fb_pid.h
 - [ ] T017 [P] [US1] 定义 FB_PID_t 完整实例结构体在 include/plcopen/fb_pid.h
-- [ ] T018 [US1] 实现 FB_PID_Init() 初始化函数在 src/plcopen/fb_pid.c（验证配置参数：sample_time > 0, out_max > out_min, int_max > int_min）
+- [ ] T018 [US1] 实现 FB_PID_Init() 初始化函数在 src/plcopen/fb_pid.c（内部验证配置参数有效性：sample_time > 0 且 < 1000s, out_max > out_min, int_max > int_min, Kp/Ki/Kd >= 0（允许全零配置用于手动模式或特殊场景），无效参数返回错误码 -1）
 - [ ] T019 [US1] 实现 FB_PID_Execute() 核心执行函数在 src/plcopen/fb_pid.c：
   - 计算比例项 P = Kp * error
   - 计算积分项（条件积分法：输出限幅时停止累加）
@@ -77,15 +77,16 @@
 - [ ] T021 [US1] 实现 FB_PID_SetAuto() 自动模式切换函数（无扰切换）在 src/plcopen/fb_pid.c
 - [ ] T022 [US1] 实现首次调用处理：使用首次测量值作为初始输出在 FB_PID_Execute() 中
 - [ ] T023 [US1] 创建 PID 功能块单元测试 tests/plcopen/test_fb_pid.c：
-  - 测试配置验证（无效参数拒绝）
+  - 测试配置验证：无效 sample_time（<=0 或 >1000s）、out_max <= out_min、int_max <= int_min、负增益参数
   - 测试阶跃响应（收敛性和稳态误差）
-  - 测试积分抗饱和（条件积分法）
+  - 测试积分抗饱和（双向条件积分法：上限停止正积分，下限停止负积分）
   - 测试手自动切换（无扰切换）
-  - 测试数值保护（溢出、NaN 输入）
-  - 测试首次调用行为
+  - 测试数值保护（溢出、NaN/Inf 输入）
+  - 测试首次调用行为（使用首次测量值作为初始输出）
 - [ ] T024 [US1] 创建 PID 控制演示程序 examples/plcopen/pid_control_demo/main.c（模拟一阶惯性系统的闭环控制）
 - [ ] T025 [US1] 创建 PID 演示程序构建配置 examples/plcopen/pid_control_demo/CMakeLists.txt
-- [ ] T026 [US1] 验证 User Story 1：编译并运行所有 PID 测试，执行演示程序，确认控制性能达标
+- [ ] T026 [US1] 创建 PID 状态码测试 tests/plcopen/test_fb_pid.c：验证所有状态码输出（FB_STATUS_OK, FB_STATUS_LIMIT_HI, FB_STATUS_LIMIT_LO, FB_STATUS_ERROR_NAN, FB_STATUS_ERROR_INF）
+- [ ] T027 [US1] 验证 User Story 1：编译并运行所有 PID 测试，执行演示程序，确认控制性能达标
 
 **检查点**: 此时 User Story 1 应完全功能正常且可独立测试
 
@@ -102,17 +103,18 @@
 - [ ] T027 [P] [US2] 定义 FB_PT1_Config_t 配置结构体在 include/plcopen/fb_pt1.h
 - [ ] T028 [P] [US2] 定义 FB_PT1_State_t 状态结构体在 include/plcopen/fb_pt1.h
 - [ ] T029 [P] [US2] 定义 FB_PT1_t 完整实例结构体在 include/plcopen/fb_pt1.h
-- [ ] T030 [US2] 实现 FB_PT1_Init() 初始化函数在 src/plcopen/fb_pt1.c（验证 time_constant > 1e-6, sample_time > 0）
+- [ ] T030 [US2] 实现 FB_PT1_Init() 初始化函数在 src/plcopen/fb_pt1.c（内部验证：time_constant >= 1e-6, sample_time > 0 且 < 1000s，无效参数返回错误码 -1）
 - [ ] T031 [US2] 实现 FB_PT1_Execute() 执行函数在 src/plcopen/fb_pt1.c：
   - 使用前向欧拉离散化：alpha = Ts/(τ+Ts)
   - 更新公式：output = output + alpha * (input - output)
   - 首次运行：output = input（无跳变启动）
 - [ ] T032 [US2] 创建 PT1 功能块单元测试 tests/plcopen/test_fb_pt1.c：
-  - 测试配置验证
-  - 测试阶跃响应（1τ 达到 63.2%）
+  - 测试配置验证：time_constant < 1e-6、sample_time <= 0 或 > 1000s
+  - 测试阶跃响应（1τ 达到 63.2%，3τ 达到 95%）
   - 测试高频噪声抑制
-  - 测试首次调用行为
-  - 测试数值保护
+  - 测试首次调用行为（输出 = 首次输入，无跳变）
+  - 测试数值保护（NaN/Inf 输入）
+  - 测试状态码输出（FB_STATUS_OK, FB_STATUS_ERROR_NAN, FB_STATUS_ERROR_INF）
 - [ ] T033 [US2] 创建 PT1 滤波演示程序 examples/plcopen/filter_demo/main.c（输入带噪声信号，展示滤波效果）
 - [ ] T034 [US2] 创建滤波演示程序构建配置 examples/plcopen/filter_demo/CMakeLists.txt
 - [ ] T035 [US2] 验证 User Story 2：编译并运行所有 PT1 测试，执行演示程序，确认滤波特性正确
@@ -129,21 +131,23 @@
 
 ### User Story 3 的实现任务
 
-- [ ] T036 [P] [US3] 定义 FB_RAMP_Config_t 配置结构体在 include/plcopen/fb_ramp.h（上升速率、下降速率、采样周期）
-- [ ] T037 [P] [US3] 定义 FB_RAMP_State_t 状态结构体在 include/plcopen/fb_ramp.h
-- [ ] T038 [P] [US3] 定义 FB_RAMP_t 完整实例结构体在 include/plcopen/fb_ramp.h
-- [ ] T039 [US3] 实现 FB_RAMP_Init() 初始化函数在 src/plcopen/fb_ramp.c（验证速率 > 0, sample_time > 0）
+- [ ] T037 [P] [US3] 定义 FB_RAMP_Config_t 配置结构体在 include/plcopen/fb_ramp.h（上升速率、下降速率、采样周期）
+- [ ] T038 [P] [US3] 定义 FB_RAMP_State_t 状态结构体在 include/plcopen/fb_ramp.h
+- [ ] T039 [P] [US3] 定义 FB_RAMP_t 完整实例结构体在 include/plcopen/fb_ramp.h
+- [ ] T040 [US3] 实现 FB_RAMP_Init() 初始化函数在 src/plcopen/fb_ramp.c（内部验证：rise_rate > 0, fall_rate > 0, sample_time > 0 且 < 1000s，无效参数返回错误码 -1）
 - [ ] T040 [US3] 实现 FB_RAMP_Execute() 执行函数在 src/plcopen/fb_ramp.c：
   - 判断目标值方向（上升/下降）
   - 选择对应速率
   - 线性逼近目标：output += rate * sample_time
   - 到达目标时停止变化
 - [ ] T041 [US3] 创建 RAMP 功能块单元测试 tests/plcopen/test_fb_ramp.c：
+  - 测试配置验证：rate <= 0、sample_time <= 0 或 > 1000s
   - 测试上升斜坡（速率和时间）
   - 测试下降斜坡
   - 测试目标值突变（从当前值开始新斜坡）
   - 测试不对称速率（上升快下降慢）
-  - 测试数值保护
+  - 测试首次调用行为
+  - 测试状态码输出
 - [ ] T042 [US3] 验证 User Story 3：编译并运行所有 RAMP 测试，确认斜坡特性正确
 
 **检查点**: 此时 User Stories 1、2 和 3 都应独立工作正常
@@ -161,17 +165,18 @@
 - [ ] T043 [P] [US4] 定义 FB_LIMIT_Config_t 配置结构体在 include/plcopen/fb_limit.h（上限、下限）
 - [ ] T044 [P] [US4] 定义 FB_LIMIT_State_t 状态结构体在 include/plcopen/fb_limit.h（限幅状态标志）
 - [ ] T045 [P] [US4] 定义 FB_LIMIT_t 完整实例结构体在 include/plcopen/fb_limit.h
-- [ ] T046 [US4] 实现 FB_LIMIT_Init() 初始化函数在 src/plcopen/fb_limit.c（验证 max > min）
+- [ ] T046 [US4] 实现 FB_LIMIT_Init() 初始化函数在 src/plcopen/fb_limit.c（内部验证：max > min，无效参数返回错误码 -1）
 - [ ] T047 [US4] 实现 FB_LIMIT_Execute() 执行函数在 src/plcopen/fb_limit.c：
   - 检查输入是否超出范围
   - 限幅到 [min, max]
   - 设置状态标志（HI_LIM/LO_LIM/OK）
 - [ ] T048 [US4] 创建 LIMIT 功能块单元测试 tests/plcopen/test_fb_limit.c：
-  - 测试上限限幅
-  - 测试下限限幅
-  - 测试正常范围（无限幅）
-  - 测试状态标志输出
-  - 测试边界值
+  - 测试配置验证：max <= min
+  - 测试上限限幅（状态 FB_STATUS_LIMIT_HI）
+  - 测试下限限幅（状态 FB_STATUS_LIMIT_LO）
+  - 测试正常范围（状态 FB_STATUS_OK，无限幅）
+  - 测试边界值（精确等于 min 或 max）
+  - 测试首次调用行为
 - [ ] T049 [US4] 验证 User Story 4：编译并运行所有 LIMIT 测试，确认限幅逻辑正确
 
 **检查点**: 此时 User Stories 1-4 都应独立工作正常
@@ -189,16 +194,19 @@
 - [ ] T050 [P] [US5] 定义 FB_DEADBAND_Config_t 配置结构体在 include/plcopen/fb_deadband.h（死区宽度、中心值）
 - [ ] T051 [P] [US5] 定义 FB_DEADBAND_State_t 状态结构体在 include/plcopen/fb_deadband.h
 - [ ] T052 [P] [US5] 定义 FB_DEADBAND_t 完整实例结构体在 include/plcopen/fb_deadband.h
-- [ ] T053 [US5] 实现 FB_DEADBAND_Init() 初始化函数在 src/plcopen/fb_deadband.c（验证 width >= 0）
+- [ ] T053 [US5] 实现 FB_DEADBAND_Init() 初始化函数在 src/plcopen/fb_deadband.c（内部验证：width >= 0，无效参数返回错误码 -1）
 - [ ] T054 [US5] 实现 FB_DEADBAND_Execute() 执行函数在 src/plcopen/fb_deadband.c：
   - 计算输入与中心值的偏差
   - 如果偏差 <= width，输出保持中心值
   - 如果偏差 > width，输出跟随输入
 - [ ] T055 [US5] 创建 DEADBAND 功能块单元测试 tests/plcopen/test_fb_deadband.c：
+  - 测试配置验证：width < 0
   - 测试死区内信号（输出不变）
   - 测试死区外信号（输出跟随）
   - 测试死区边界值
   - 测试零死区宽度（直通模式）
+  - 测试首次调用行为
+  - 测试状态码输出
 - [ ] T056 [US5] 验证 User Story 5：编译并运行所有 DEADBAND 测试，确认死区逻辑正确
 
 **检查点**: 此时 User Stories 1-5 都应独立工作正常
@@ -216,17 +224,20 @@
 - [ ] T057 [P] [US6] 定义 FB_INTEGRATOR_Config_t 配置结构体在 include/plcopen/fb_integrator.h（采样周期、输出限幅）
 - [ ] T058 [P] [US6] 定义 FB_INTEGRATOR_State_t 状态结构体在 include/plcopen/fb_integrator.h（积分值、限幅标志）
 - [ ] T059 [P] [US6] 定义 FB_INTEGRATOR_t 完整实例结构体在 include/plcopen/fb_integrator.h
-- [ ] T060 [US6] 实现 FB_INTEGRATOR_Init() 初始化函数在 src/plcopen/fb_integrator.c
+- [ ] T060 [US6] 实现 FB_INTEGRATOR_Init() 初始化函数在 src/plcopen/fb_integrator.c（内部验证：sample_time > 0 且 < 1000s, 如配置限幅则 out_max > out_min，无效参数返回错误码 -1）
 - [ ] T061 [US6] 实现 FB_INTEGRATOR_Execute() 执行函数在 src/plcopen/fb_integrator.c：
   - 积分计算：integral += input * sample_time
   - 输出限幅（如果配置）
   - 设置限幅状态标志
 - [ ] T062 [US6] 实现 FB_INTEGRATOR_Reset() 复位函数在 src/plcopen/fb_integrator.c（归零积分值）
 - [ ] T063 [US6] 创建 INTEGRATOR 功能块单元测试 tests/plcopen/test_fb_integrator.c：
+  - 测试配置验证：sample_time <= 0 或 > 1000s, out_max <= out_min（如启用限幅）
   - 测试恒定输入累积（线性增长）
   - 测试复位功能
-  - 测试输出限幅
-  - 测试数值保护（溢出检测）
+  - 测试输出限幅（状态 FB_STATUS_LIMIT_HI/LO）
+  - 测试首次调用行为（积分值从0开始）
+  - 测试数值保护（溢出、NaN/Inf 输入）
+  - 测试状态码输出
 - [ ] T064 [US6] 验证 User Story 6：编译并运行所有 INTEGRATOR 测试，确认积分逻辑正确
 
 **检查点**: 此时 User Stories 1-6 都应独立工作正常
@@ -244,18 +255,20 @@
 - [ ] T065 [P] [US7] 定义 FB_DERIVATIVE_Config_t 配置结构体在 include/plcopen/fb_derivative.h（采样周期、滤波时间常数）
 - [ ] T066 [P] [US7] 定义 FB_DERIVATIVE_State_t 状态结构体在 include/plcopen/fb_derivative.h（前一采样值、滤波后输出）
 - [ ] T067 [P] [US7] 定义 FB_DERIVATIVE_t 完整实例结构体在 include/plcopen/fb_derivative.h
-- [ ] T068 [US7] 实现 FB_DERIVATIVE_Init() 初始化函数在 src/plcopen/fb_derivative.c
+- [ ] T068 [US7] 实现 FB_DERIVATIVE_Init() 初始化函数在 src/plcopen/fb_derivative.c（内部验证：sample_time > 0 且 < 1000s, filter_time_constant >= 0，无效参数返回错误码 -1）
 - [ ] T069 [US7] 实现 FB_DERIVATIVE_Execute() 执行函数在 src/plcopen/fb_derivative.c：
   - 计算原始微分：d = (input - prev_input) / sample_time
   - 一阶滤波（如果配置）：output = output + alpha * (d - output)
   - 更新前一采样值
   - 首次运行：输出 0（避免跳变）
 - [ ] T070 [US7] 创建 DERIVATIVE 功能块单元测试 tests/plcopen/test_fb_derivative.c：
+  - 测试配置验证：sample_time <= 0 或 > 1000s, filter_time_constant < 0
   - 测试斜坡输入（恒定输出）
-  - 测试阶跃输入（平滑脉冲而非无穷大）
-  - 测试滤波效果
-  - 测试首次调用行为
-  - 测试数值保护
+  - 测试阶跃输入（平滑脉冲而非无穷大尖峰）
+  - 测试滤波效果（高 vs 低滤波时间常数）
+  - 测试首次调用行为（输出0，避免初始尖峰）
+  - 测试数值保护（NaN/Inf 输入）
+  - 测试状态码输出
 - [ ] T071 [US7] 验证 User Story 7：编译并运行所有 DERIVATIVE 测试，确认微分逻辑正确
 
 **检查点**: 所有用户故事（1-7）现在应该独立功能正常
@@ -277,6 +290,7 @@
 - [ ] T080 [P] 生成 Doxygen API 文档（如果配置了 Doxygen）
 - [ ] T081 运行代码静态分析工具 cppcheck（如果可用），修复发现的问题
 - [ ] T082 执行完整测试套件，确认所有测试通过且覆盖率 > 90%
+- [ ] T082a 使用 gcov 或类似工具生成测试覆盖率报告，输出到 docs/002-coverage-report.md（确保 SC-005 达标）
 - [ ] T083 代码审查：检查代码质量、注释完整性、圈复杂度（目标 < 10）
 - [ ] T084 运行 specs/002-plcopen-function-blocks/checklists/requirements.md 中的质量检查清单
 - [ ] T085 准备发布：更新 CHANGELOG.md，标记版本 v1.0.0，准备合并到主分支
@@ -430,17 +444,17 @@ task T049  # 验证
 
 ## 任务统计摘要
 
-- **总任务数**: 85 个任务
+- **总任务数**: 87 个任务（包含 T082a 覆盖率测量任务）
 - **Setup 阶段**: 6 个任务
 - **Foundational 阶段**: 8 个任务（关键阻塞点）
-- **User Story 1 (PID - P1)**: 12 个任务
+- **User Story 1 (PID - P1)**: 13 个任务
 - **User Story 2 (PT1 - P1)**: 9 个任务
 - **User Story 3 (RAMP - P2)**: 7 个任务
 - **User Story 4 (LIMIT - P2)**: 7 个任务
 - **User Story 5 (DEADBAND - P3)**: 7 个任务
 - **User Story 6 (INTEGRATOR - P3)**: 8 个任务
 - **User Story 7 (DERIVATIVE - P3)**: 7 个任务
-- **Polish 阶段**: 14 个任务
+- **Polish 阶段**: 15 个任务（新增覆盖率报告任务 T082a）
 
 ### 并行机会识别
 
@@ -453,9 +467,9 @@ task T049  # 验证
 
 仅实现 User Stories 1 和 2（PID + PT1）:
 - Setup + Foundational: 14 个任务
-- User Story 1: 12 个任务
+- User Story 1: 13 个任务
 - User Story 2: 9 个任务
-- **MVP 总计**: 35 个任务（约 2-3 周工作量）
+- **MVP 总计**: 36 个任务（约 2-3 周工作量）
 
 ---
 
@@ -474,6 +488,6 @@ task T049  # 验证
 
 ---
 
-**任务列表状态**: ✅ 已生成，可立即执行
+**任务列表状态**: ✅ 已生成并修订（修复任务编号、覆盖率测量、测试规范）
 **下一步**: 开始 Phase 1（Setup），创建项目目录结构
-**最后更新**: 2026-01-18
+**最后更新**: 2026-01-18（分析和修复）
