@@ -35,30 +35,30 @@
 /**
  * @brief 初始化 PID 控制器
  */
-int FB_PID_Init(FB_PID_t* fb, const FB_PID_Config_t* config) {
+FB_Status_t FB_PID_Init(FB_PID_t* fb, const FB_PID_Config_t* config) {
     /* 参数验证 */
     if (fb == NULL || config == NULL) {
-        return -1;
+        return FB_STATUS_ERROR_CONFIG;
     }
 
     /* 验证采样周期 */
     if (config->sample_time <= 0.0f || config->sample_time >= MAX_SAMPLE_TIME) {
-        return -1;
+        return FB_STATUS_ERROR_CONFIG;
     }
 
     /* 验证输出限幅范围 */
     if (config->out_max <= config->out_min) {
-        return -1;
+        return FB_STATUS_ERROR_CONFIG;
     }
 
     /* 验证积分限幅范围 */
     if (config->int_max <= config->int_min) {
-        return -1;
+        return FB_STATUS_ERROR_CONFIG;
     }
 
     /* 验证增益参数（允许零值，用于手动模式或特殊场景） */
     if (config->kp < 0.0f || config->ki < 0.0f || config->kd < 0.0f) {
-        return -1;
+        return FB_STATUS_ERROR_CONFIG;
     }
 
     /* 复制配置 */
@@ -72,7 +72,7 @@ int FB_PID_Init(FB_PID_t* fb, const FB_PID_Config_t* config) {
     fb->state.first_run = true;
     fb->state.status = FB_STATUS_OK;
 
-    return 0;
+    return FB_STATUS_OK;
 }
 
 /**

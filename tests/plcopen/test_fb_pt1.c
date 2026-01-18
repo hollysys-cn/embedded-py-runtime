@@ -39,7 +39,8 @@ void tearDown(void) {}
 void test_pt1_init_valid_config(void) {
     FB_Status_t status = FB_PT1_Init(&pt1, &config);
     TEST_ASSERT_EQUAL(FB_STATUS_OK, status);
-    TEST_ASSERT_TRUE(pt1.state.is_initialized);
+    /* 初始化后 first_run 应为 true */
+    TEST_ASSERT_TRUE(pt1.state.first_run);
 }
 
 void test_pt1_init_invalid_time_constant(void) {
@@ -137,18 +138,20 @@ void test_pt1_nan_input(void) {
     FB_PT1_Init(&pt1, &config);
 
     float nan_value = 0.0f / 0.0f;
-    FB_Status_t status = FB_PT1_Execute(&pt1, nan_value);
+    float output = FB_PT1_Execute(&pt1, nan_value);
 
-    TEST_ASSERT_EQUAL(FB_STATUS_ERROR_NAN, status);
+    TEST_ASSERT_EQUAL(FB_STATUS_ERROR_NAN, pt1.state.status);
+    TEST_ASSERT_EQUAL_FLOAT(0.0f, output);
 }
 
 void test_pt1_inf_input(void) {
     FB_PT1_Init(&pt1, &config);
 
     float inf_value = 1.0f / 0.0f;
-    FB_Status_t status = FB_PT1_Execute(&pt1, inf_value);
+    float output = FB_PT1_Execute(&pt1, inf_value);
 
-    TEST_ASSERT_EQUAL(FB_STATUS_ERROR_INF, status);
+    TEST_ASSERT_EQUAL(FB_STATUS_ERROR_INF, pt1.state.status);
+    TEST_ASSERT_EQUAL_FLOAT(0.0f, output);
 }
 
 /* ========== 状态码测试 ========== */
@@ -156,8 +159,8 @@ void test_pt1_inf_input(void) {
 void test_pt1_status_ok(void) {
     FB_PT1_Init(&pt1, &config);
 
-    FB_Status_t status = FB_PT1_Execute(&pt1, 50.0f);
-    TEST_ASSERT_EQUAL(FB_STATUS_OK, status);
+    FB_PT1_Execute(&pt1, 50.0f);
+    TEST_ASSERT_EQUAL(FB_STATUS_OK, pt1.state.status);
 }
 
 /* ========== 运行器函数 ========== */

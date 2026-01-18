@@ -41,7 +41,7 @@ typedef struct {
     FB_PT1_State_t state;
 } FB_PT1_t;
 
-int FB_PT1_Init(FB_PT1_t* fb, const FB_PT1_Config_t* config);
+FB_Status_t FB_PT1_Init(FB_PT1_t* fb, const FB_PT1_Config_t* config);
 float FB_PT1_Execute(FB_PT1_t* fb, float input);
 
 #ifdef __cplusplus

@@ -102,12 +102,12 @@ typedef struct {
  * @code
  * FB_PID_t pid;
  * FB_PID_Config_t config = {...};
- * if (FB_PID_Init(&pid, &config) != 0) {
+ * if (FB_PID_Init(&pid, &config) != FB_STATUS_OK) {
  *     // 处理配置错误
  * }
  * @endcode
  */
-int FB_PID_Init(FB_PID_t* fb, const FB_PID_Config_t* config);
+FB_Status_t FB_PID_Init(FB_PID_t* fb, const FB_PID_Config_t* config);
 
 /**
  * @brief 执行 PID 控制算法

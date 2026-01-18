@@ -1,0 +1,60 @@
+# Docker 测试环境 - .dockerignore
+# 排除不需要复制到镜像中的文件
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# 构建产物
+build/
+*.o
+*.a
+*.so
+*.exe
+*.elf
+*.bin
+*.hex
+
+# 测试报告
+reports/
+coverage/
+*.gcov
+*.gcda
+*.gcno
+
+# 编辑器和 IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# 文档（除了必要的）
+docs/*.html
+docs/*.pdf
+
+# 临时文件
+*.log
+*.tmp
+*.cache
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+venv/
+.venv/
+
+# Node.js (如果有)
+node_modules/
+package-lock.json
+yarn.lock
+
+# 其他
+.env
+.env.local
+*.bak

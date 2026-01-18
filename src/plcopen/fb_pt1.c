@@ -8,17 +8,17 @@
 #include "plcopen/fb_pt1.h"
 #include <string.h>
 
-int FB_PT1_Init(FB_PT1_t* fb, const FB_PT1_Config_t* config) {
+FB_Status_t FB_PT1_Init(FB_PT1_t* fb, const FB_PT1_Config_t* config) {
     if (fb == NULL || config == NULL) {
-        return -1;
+        return FB_STATUS_ERROR_CONFIG;
     }
 
     if (config->time_constant < MIN_VALID_VALUE) {
-        return -1;
+        return FB_STATUS_ERROR_CONFIG;
     }
 
     if (config->sample_time <= 0.0f || config->sample_time >= MAX_SAMPLE_TIME) {
-        return -1;
+        return FB_STATUS_ERROR_CONFIG;
     }
 
     memcpy(&fb->config, config, sizeof(FB_PT1_Config_t));
@@ -27,7 +27,7 @@ int FB_PT1_Init(FB_PT1_t* fb, const FB_PT1_Config_t* config) {
     fb->state.first_run = true;
     fb->state.status = FB_STATUS_OK;
 
-    return 0;
+    return FB_STATUS_OK;
 }
 
 float FB_PT1_Execute(FB_PT1_t* fb, float input) {

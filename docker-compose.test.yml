@@ -1,0 +1,45 @@
+# PLCopen 测试环境 Docker Compose 配置
+version: '3.8'
+
+services:
+  plcopen-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    image: plcopen-test:latest
+    container_name: plcopen-test-env
+
+    # 挂载项目目录
+    volumes:
+      - .:/workspace
+      # 缓存构建产物（可选）
+      - plcopen-build-cache:/workspace/build
+
+    # 工作目录
+    working_dir: /workspace
+
+    # 保持容器运行
+    tty: true
+    stdin_open: true
+
+    # 环境变量
+    environment:
+      - TZ=Asia/Shanghai
+      - LANG=C.UTF-8
+
+    # 限制资源（可选）
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+
+volumes:
+  plcopen-build-cache:
+    driver: local
+
+# 使用方法：
+# 1. 构建镜像：docker-compose -f docker-compose.test.yml build
+# 2. 启动容器：docker-compose -f docker-compose.test.yml up -d
+# 3. 进入容器：docker-compose -f docker-compose.test.yml exec plcopen-test bash
+# 4. 停止容器：docker-compose -f docker-compose.test.yml down
