@@ -1,0 +1,57 @@
+{
+  "name": "ARM Cortex-M4",
+  "family": "ARM Cortex-M",
+  "architecture": "ARMv7E-M",
+  "cpu": "cortex-m4",
+  "fpu": "fpv4-sp-d16",
+  "float_abi": "hard",
+  "endian": "little",
+  "pointer_size": 32,
+  "examples": ["STM32F4", "LPC4300", "Kinetis K60"],
+  "compiler_flags": {
+    "common": [
+      "-mcpu=cortex-m4",
+      "-mthumb",
+      "-mfloat-abi=hard",
+      "-mfpu=fpv4-sp-d16"
+    ],
+    "c_standard": ["-std=c11"],
+    "optimization": {
+      "debug": ["-O0", "-g3"],
+      "release_size": ["-Os", "-g0"],
+      "release_speed": ["-O2", "-g0"]
+    },
+    "warnings": [
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wshadow"
+    ]
+  },
+  "linker_flags": [
+    "--specs=nano.specs",
+    "--specs=nosys.specs",
+    "-Wl,--gc-sections"
+  ],
+  "c11_features": {
+    "supported": [
+      "_Static_assert",
+      "_Generic",
+      "_Alignas",
+      "_Alignof",
+      "anonymous_structs",
+      "atomic_types_basic"
+    ],
+    "limited": [
+      "threads_h"
+    ],
+    "unsupported": []
+  },
+  "memory_layout": {
+    "flash_start": "0x08000000",
+    "flash_size": "512K",
+    "ram_start": "0x20000000",
+    "ram_size": "128K",
+    "note": "示例值（STM32F407VG），实际应根据具体 MCU 型号配置"
+  }
+}

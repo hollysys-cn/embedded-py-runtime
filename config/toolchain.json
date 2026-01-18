@@ -1,0 +1,37 @@
+{
+  "name": "ARM GNU Toolchain",
+  "version": "10.3-2021.10",
+  "vendor": "ARM",
+  "targets": ["arm-none-eabi"],
+  "platforms": {
+    "linux-x86_64": {
+      "url": "https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2",
+      "sha256": "97dbb4f019ad1650b732faffcc881689cedc14e2b7ee863d390e0a41ef16c9a3",
+      "mirrors": [
+        "https://mirrors.tuna.tsinghua.edu.cn/armbian-releases/_toolchain/gcc-arm-10.3-2021.10-x86_64-linux.tar.bz2",
+        "https://mirrors.aliyun.com/developer/toolchains/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2"
+      ]
+    },
+    "darwin-x86_64": {
+      "url": "https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-mac.tar.bz2",
+      "sha256": "fb613dacbc7d0c4a7a35ee4a8c3a1ae151f1b2f81e5e981b5cc32d3ecc75bbe2",
+      "mirrors": []
+    },
+    "win32": {
+      "url": "https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-win32.zip",
+      "sha256": "2383e4eb4ea23f248d33adc70dc3227e5f8323e913d9d08428ddd933e93edbd",
+      "mirrors": []
+    }
+  },
+  "install_path": ".toolchain/gcc-arm-none-eabi",
+  "executables": {
+    "gcc": "bin/arm-none-eabi-gcc",
+    "g++": "bin/arm-none-eabi-g++",
+    "as": "bin/arm-none-eabi-as",
+    "ld": "bin/arm-none-eabi-ld",
+    "objcopy": "bin/arm-none-eabi-objcopy",
+    "objdump": "bin/arm-none-eabi-objdump",
+    "size": "bin/arm-none-eabi-size",
+    "gdb": "bin/arm-none-eabi-gdb"
+  }
+}

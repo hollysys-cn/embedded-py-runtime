@@ -1,0 +1,60 @@
+{
+  "debugger": "openocd",
+  "version": "0.11.0+",
+  "description": "OpenOCD 调试配置 - 用于 ARM Cortex-M4 目标",
+  "interface": {
+    "type": "stlink-v2",
+    "config_file": "interface/stlink-v2.cfg",
+    "alternatives": [
+      {
+        "type": "jlink",
+        "config_file": "interface/jlink.cfg"
+      },
+      {
+        "type": "cmsis-dap",
+        "config_file": "interface/cmsis-dap.cfg"
+      }
+    ]
+  },
+  "target": {
+    "type": "stm32f4x",
+    "config_file": "target/stm32f4x.cfg",
+    "alternatives": [
+      {
+        "type": "stm32f7x",
+        "config_file": "target/stm32f7x.cfg",
+        "note": "For STM32F7 series"
+      }
+    ]
+  },
+  "gdb": {
+    "executable": "arm-none-eabi-gdb",
+    "port": 3333,
+    "telnet_port": 4444,
+    "tcl_port": 6666,
+    "init_commands": [
+      "target extended-remote localhost:3333",
+      "monitor reset halt",
+      "load",
+      "monitor reset init"
+    ],
+    "post_attach_commands": [
+      "set print pretty on",
+      "set pagination off"
+    ]
+  },
+  "transport": "swd",
+  "speed_khz": 4000,
+  "reset_config": {
+    "type": "srst_only",
+    "connect_under_reset": true
+  },
+  "adapter": {
+    "serial": null,
+    "note": "设置为特定的适配器序列号，如果有多个调试器连接"
+  },
+  "examples": {
+    "start_command": "openocd -f interface/stlink-v2.cfg -f target/stm32f4x.cfg",
+    "gdb_command": "arm-none-eabi-gdb -ex 'target extended-remote localhost:3333' firmware.elf"
+  }
+}

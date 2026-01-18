@@ -319,3 +319,9 @@ docker-compose.override.yml
 
 # Dev container temp files
 .devcontainer/.env
+
+# C11 Embedded Development Environment
+.toolchain/
+build/
+*.lock
+.build-state.json

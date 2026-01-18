@@ -1,0 +1,189 @@
+# CMakeLists.txt Template for ARM Cortex-M4 Project
+# 用于创建 ARM Cortex-M4 嵌入式项目的 CMake 配置模板
+#
+# 使用方式:
+#   1. 复制此文件到项目根目录并重命名为 CMakeLists.txt
+#   2. 修改项目名称、版本和源文件列表
+#   3. 根据需要调整链接脚本路径和其他配置
+#   4. 构建:
+#      cmake -B build -DCMAKE_TOOLCHAIN_FILE=.specify/templates/cmake/toolchain-arm-cortex-m4.cmake
+#      cmake --build build
+#
+# 编码: UTF-8
+# 换行符: LF
+
+cmake_minimum_required(VERSION 3.20)
+
+# 项目信息（请根据实际情况修改）
+project(firmware
+    VERSION 1.0.0
+    DESCRIPTION "ARM Cortex-M4 嵌入式项目"
+    LANGUAGES C ASM
+)
+
+# 可选：启用 C++
+# enable_language(CXX)
+
+# 构建类型（如果未指定，默认为 Debug）
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
+endif()
+
+message(STATUS "构建类型: ${CMAKE_BUILD_TYPE}")
+
+#######################################
+# 源文件配置
+#######################################
+
+# 添加你的源文件（请根据实际情况修改）
+set(SOURCE_FILES
+    # 示例：
+    # src/main.c
+    # src/system.c
+    # src/drivers/uart.c
+)
+
+# 添加汇编启动文件（请根据实际 MCU 修改）
+set(STARTUP_FILE
+    # 示例：
+    # startup/startup_stm32f407xx.s
+)
+
+# 添加头文件目录
+set(INCLUDE_DIRS
+    # 示例：
+    # include
+    # drivers/include
+)
+
+#######################################
+# 可执行文件配置
+#######################################
+
+# 创建可执行文件
+add_executable(${PROJECT_NAME}.elf
+    ${SOURCE_FILES}
+    ${STARTUP_FILE}
+)
+
+# 添加头文件搜索路径
+target_include_directories(${PROJECT_NAME}.elf PRIVATE
+    ${INCLUDE_DIRS}
+)
+
+# 编译定义（预处理器宏）
+target_compile_definitions(${PROJECT_NAME}.elf PRIVATE
+    # 示例：根据你的 MCU 型号添加
+    # USE_HAL_DRIVER
+    # STM32F407xx
+
+    # 根据构建类型添加
+    $<$<CONFIG:Debug>:DEBUG>
+    $<$<CONFIG:Release>:RELEASE>
+)
+
+#######################################
+# 链接脚本配置
+#######################################
+
+# 链接脚本路径（请根据实际情况修改）
+set(LINKER_SCRIPT
+    # 示例：
+    # ${CMAKE_SOURCE_DIR}/linker/STM32F407VGTx_FLASH.ld
+)
+
+# 如果指定了链接脚本，则使用它
+if(LINKER_SCRIPT)
+    target_link_options(${PROJECT_NAME}.elf PRIVATE
+        -T${LINKER_SCRIPT}
+        -Wl,-Map=${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map
+    )
+    message(STATUS "链接脚本: ${LINKER_SCRIPT}")
+else()
+    message(WARNING "未指定链接脚本，请在 LINKER_SCRIPT 变量中设置")
+endif()
+
+#######################################
+# 生成额外的输出文件
+#######################################
+
+# 生成 HEX 文件
+add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
+    COMMAND ${CMAKE_OBJCOPY} -O ihex
+        $<TARGET_FILE:${PROJECT_NAME}.elf>
+        ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex
+    COMMENT "生成 HEX 文件: ${PROJECT_NAME}.hex"
+)
+
+# 生成 BIN 文件
+add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
+    COMMAND ${CMAKE_OBJCOPY} -O binary
+        $<TARGET_FILE:${PROJECT_NAME}.elf>
+        ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.bin
+    COMMENT "生成 BIN 文件: ${PROJECT_NAME}.bin"
+)
+
+# 显示代码大小
+add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
+    COMMAND ${CMAKE_SIZE} --format=berkeley
+        $<TARGET_FILE:${PROJECT_NAME}.elf>
+    COMMENT "代码大小统计:"
+)
+
+# 生成反汇编文件（可选，用于调试）
+add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
+    COMMAND ${CMAKE_OBJDUMP} -h -S
+        $<TARGET_FILE:${PROJECT_NAME}.elf>
+        > ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.lst
+    COMMENT "生成反汇编文件: ${PROJECT_NAME}.lst"
+)
+
+#######################################
+# 安装配置（可选）
+#######################################
+
+# 安装生成的文件到指定目录
+install(FILES
+    ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.elf
+    ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex
+    ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.bin
+    ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map
+    DESTINATION bin
+)
+
+#######################################
+# 打印配置摘要
+#######################################
+
+message(STATUS "======================================")
+message(STATUS "项目配置摘要")
+message(STATUS "======================================")
+message(STATUS "项目名称: ${PROJECT_NAME}")
+message(STATUS "版本: ${PROJECT_VERSION}")
+message(STATUS "构建类型: ${CMAKE_BUILD_TYPE}")
+message(STATUS "C 编译器: ${CMAKE_C_COMPILER}")
+message(STATUS "C 标准: C${CMAKE_C_STANDARD}")
+message(STATUS "输出文件:")
+message(STATUS "  - ${PROJECT_NAME}.elf")
+message(STATUS "  - ${PROJECT_NAME}.hex")
+message(STATUS "  - ${PROJECT_NAME}.bin")
+message(STATUS "  - ${PROJECT_NAME}.map")
+message(STATUS "======================================")
+
+#######################################
+# 帮助目标
+#######################################
+
+# 添加自定义目标显示帮助信息
+add_custom_target(help
+    COMMAND ${CMAKE_COMMAND} -E echo ""
+    COMMAND ${CMAKE_COMMAND} -E echo "可用的构建目标:"
+    COMMAND ${CMAKE_COMMAND} -E echo "  all       - 构建项目"
+    COMMAND ${CMAKE_COMMAND} -E echo "  clean     - 清理构建产物"
+    COMMAND ${CMAKE_COMMAND} -E echo "  install   - 安装生成的文件"
+    COMMAND ${CMAKE_COMMAND} -E echo "  help      - 显示此帮助信息"
+    COMMAND ${CMAKE_COMMAND} -E echo ""
+    COMMAND ${CMAKE_COMMAND} -E echo "使用方式:"
+    COMMAND ${CMAKE_COMMAND} -E echo "  cmake --build build --target <target>"
+    COMMAND ${CMAKE_COMMAND} -E echo ""
+)

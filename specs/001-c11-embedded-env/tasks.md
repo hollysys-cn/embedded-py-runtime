@@ -17,11 +17,11 @@
 
 **目的**: 创建基础目录结构和配置文件
 
-- [ ] T001 创建 `.specify/config/` 目录及基础 JSON 配置结构
-- [ ] T002 创建 `.specify/scripts/` 目录（setup/, build/, debug/ 子目录）
-- [ ] T003 创建 `.specify/templates/` 目录（cmake/, examples/ 子目录）
-- [ ] T004 [P] 更新 `.gitignore` 添加 `.toolchain/`, `build/`, `*.lock` 等规则
-- [ ] T005 [P] 创建 `tests/` 目录结构（toolchain/, build/, debug/, integration/）
+- [X] T001 创建 `.specify/config/` 目录及基础 JSON 配置结构
+- [X] T002 创建 `.specify/scripts/` 目录（setup/, build/, debug/ 子目录）
+- [X] T003 创建 `.specify/templates/` 目录（cmake/, examples/ 子目录）
+- [X] T004 [P] 更新 `.gitignore` 添加 `.toolchain/`, `build/`, `*.lock` 等规则
+- [X] T005 [P] 创建 `tests/` 目录结构（toolchain/, build/, debug/, integration/）
 
 ---
 
@@ -31,11 +31,11 @@
 
 **⚠️ 关键**: 此阶段完成前，任何用户故事都不能开始实现
 
-- [ ] T006 创建 `.specify/config/toolchain.json` - 定义工具链版本、下载URL和SHA256
-- [ ] T007 [P] 创建 `.specify/config/mirrors.json` - 配置国内镜像源（清华、阿里云、中科大）
-- [ ] T008 [P] 创建 `.specify/config/platform-cortex-m4.json` - 定义ARM Cortex-M4编译标志和特性
-- [ ] T009 实现平台检测功能（detect_platform函数，识别 Linux/macOS/Windows）
-- [ ] T010 [P] 实现日志输出格式化函数（支持 [INFO]/[WARN]/[ERROR] 彩色输出）
+- [X] T006 创建 `.specify/config/toolchain.json` - 定义工具链版本、下载URL和SHA256
+- [X] T007 [P] 创建 `.specify/config/mirrors.json` - 配置国内镜像源（清华、阿里云、中科大）
+- [X] T008 [P] 创建 `.specify/config/platform-cortex-m4.json` - 定义ARM Cortex-M4编译标志和特性
+- [X] T009 实现平台检测功能（detect_platform函数，识别 Linux/macOS/Windows）
+- [X] T010 [P] 实现日志输出格式化函数（支持 [INFO]/[WARN]/[ERROR] 彩色输出）
 
 **Checkpoint**: 基础配置就绪 - 用户故事实现可以开始并行进行
 
@@ -49,17 +49,17 @@
 
 ### 实现 User Story 1
 
-- [ ] T011 [P] [US1] 创建 `.specify/scripts/setup/install-toolchain.sh` - 工具链下载和安装主脚本
-- [ ] T012 [P] [US1] 实现 SHA256 校验函数（使用 sha256sum 或 shasum）
-- [ ] T013 [US1] 实现工具链下载逻辑（支持官方源和国内镜像，带进度显示）
-- [ ] T014 [US1] 实现工具链解压和安装到 `.toolchain/gcc-arm-none-eabi/`
-- [ ] T015 [US1] 创建 `.specify/scripts/setup/verify-toolchain.sh` - 验证工具链安装
-- [ ] T016 [US1] 实现 C11 特性检测（编译测试程序验证 _Static_assert等）
-- [ ] T017 [US1] 实现 Cortex-M4 支持检测（检查 --target-help 输出）
-- [ ] T018 [US1] 创建 `.specify/scripts/setup/configure-environment.sh` - 环境变量配置
-- [ ] T019 [US1] 添加工具链 bin/ 到 PATH，设置 ARM_TOOLCHAIN_PATH 环境变量
-- [ ] T020 [P] [US1] 创建 `tests/toolchain/test_install.bats` - 测试安装脚本
-- [ ] T021 [P] [US1] 创建 `tests/toolchain/test_compile.bats` - 测试 C11 编译
+- [X] T011 [P] [US1] 创建 `.specify/scripts/setup/install-toolchain.sh` - 工具链下载和安装主脚本
+- [X] T012 [P] [US1] 实现 SHA256 校验函数（使用 sha256sum 或 shasum）
+- [X] T013 [US1] 实现工具链下载逻辑（支持官方源和国内镜像，带进度显示）
+- [X] T014 [US1] 实现工具链解压和安装到 `.toolchain/gcc-arm-none-eabi/`
+- [X] T015 [US1] 创建 `.specify/scripts/setup/verify-toolchain.sh` - 验证工具链安装
+- [X] T016 [US1] 实现 C11 特性检测（编译测试程序验证 _Static_assert等）
+- [X] T017 [US1] 实现 Cortex-M4 支持检测（检查 --target-help 输出）
+- [X] T018 [US1] 创建 `.specify/scripts/setup/configure-environment.sh` - 环境变量配置
+- [X] T019 [US1] 添加工具链 bin/ 到 PATH，设置 ARM_TOOLCHAIN_PATH 环境变量
+- [X] T020 [P] [US1] 创建 `tests/toolchain/test_install.bats` - 测试安装脚本
+- [X] T021 [P] [US1] 创建 `tests/toolchain/test_compile.bats` - 测试 C11 编译
 
 **Checkpoint**: 此时 User Story 1 应完全可用 - 能下载、安装、验证工具链并编译 C11 程序
 
@@ -73,15 +73,15 @@
 
 ### 实现 User Story 2
 
-- [ ] T022 [P] [US2] 创建 `.specify/templates/cmake/toolchain-arm-cortex-m4.cmake` - CMake 工具链文件
-- [ ] T023 [US2] 配置 CMAKE_SYSTEM_NAME=Generic 和 CMAKE_SYSTEM_PROCESSOR=ARM
-- [ ] T024 [US2] 设置 C 编译器路径（arm-none-eabi-gcc）和 C11 标准标志
-- [ ] T025 [US2] 配置 Cortex-M4 特定标志（-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16）
-- [ ] T026 [US2] 配置链接器选项（--specs=nano.specs --specs=nosys.specs）
-- [ ] T027 [P] [US2] 创建 `.specify/config/debug-openocd.json` - OpenOCD 调试配置
-- [ ] T028 [P] [US2] 创建 `.specify/templates/cmake/CMakeLists.txt.template` - 项目 CMake 模板
-- [ ] T029 [US2] 配置自动生成 HEX 和 BIN 文件的 CMake 命令
-- [ ] T030 [US2] 添加代码大小显示（arm-none-eabi-size）到 CMake 构建后命令
+- [X] T022 [P] [US2] 创建 `.specify/templates/cmake/toolchain-arm-cortex-m4.cmake` - CMake 工具链文件
+- [X] T023 [US2] 配置 CMAKE_SYSTEM_NAME=Generic 和 CMAKE_SYSTEM_PROCESSOR=ARM
+- [X] T024 [US2] 设置 C 编译器路径（arm-none-eabi-gcc）和 C11 标准标志
+- [X] T025 [US2] 配置 Cortex-M4 特定标志（-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16）
+- [X] T026 [US2] 配置链接器选项（--specs=nano.specs --specs=nosys.specs）
+- [X] T027 [P] [US2] 创建 `.specify/config/debug-openocd.json` - OpenOCD 调试配置
+- [X] T028 [P] [US2] 创建 `.specify/templates/cmake/CMakeLists.txt.template` - 项目 CMake 模板
+- [X] T029 [US2] 配置自动生成 HEX 和 BIN 文件的 CMake 命令
+- [X] T030 [US2] 添加代码大小显示（arm-none-eabi-size）到 CMake 构建后命令
 
 **Checkpoint**: 此时 User Story 2 应完全可用 - 能交叉编译生成 ARM Cortex-M4 二进制文件
 
@@ -95,19 +95,19 @@
 
 ### 实现 User Story 3
 
-- [ ] T031 [P] [US3] 创建 `.specify/scripts/build/lock-manager.sh` - 构建锁管理
-- [ ] T032 [US3] 实现锁文件创建/检查逻辑（`build/.build.lock`，包含PID）
-- [ ] T033 [US3] 实现锁过期检测（检查PID是否仍在运行）
-- [ ] T034 [US3] 创建 `.specify/scripts/build/build.sh` - 构建主脚本
-- [ ] T035 [US3] 实现命令行参数解析（--config, --clean, --verbose, --jobs）
-- [ ] T036 [US3] 集成构建锁机制，防止并发构建
-- [ ] T037 [US3] 实现 CMake 配置步骤（cmake -B build -DCMAKE_BUILD_TYPE=...）
-- [ ] T038 [US3] 实现 CMake 构建步骤（cmake --build build --parallel）
-- [ ] T039 [US3] 实现构建状态跟踪（保存到 `build/.build-state.json`）
-- [ ] T040 [US3] 创建 `.specify/scripts/build/clean.sh` - 清理构建产物
-- [ ] T041 [US3] 实现清理选项（--all, --obj, --artifacts）
-- [ ] T042 [US3] 实现构建失败时的自动清理逻辑
-- [ ] T043 [US3] 添加错误日志保存到 `build/logs/error.log`
+- [X] T031 [P] [US3] 创建 `.specify/scripts/build/lock-manager.sh` - 构建锁管理
+- [X] T032 [US3] 实现锁文件创建/检查逻辑（`build/.build.lock`，包含PID）
+- [X] T033 [US3] 实现锁过期检测（检查PID是否仍在运行）
+- [X] T034 [US3] 创建 `.specify/scripts/build/build.sh` - 构建主脚本
+- [X] T035 [US3] 实现命令行参数解析（--config, --clean, --verbose, --jobs）
+- [X] T036 [US3] 集成构建锁机制，防止并发构建
+- [X] T037 [US3] 实现 CMake 配置步骤（cmake -B build -DCMAKE_BUILD_TYPE=...）
+- [X] T038 [US3] 实现 CMake 构建步骤（cmake --build build --parallel）
+- [X] T039 [US3] 实现构建状态跟踪（保存到 `build/.build-state.json`）
+- [X] T040 [US3] 创建 `.specify/scripts/build/clean.sh` - 清理构建产物
+- [X] T041 [US3] 实现清理选项（--all, --obj, --artifacts）
+- [X] T042 [US3] 实现构建失败时的自动清理逻辑
+- [X] T043 [US3] 添加错误日志保存到 `build/logs/error.log`
 - [ ] T044 [P] [US3] 创建 `tests/build/test_build.bats` - 测试构建脚本
 - [ ] T045 [P] [US3] 创建 `tests/build/test_incremental.bats` - 测试增量编译
 - [ ] T046 [P] [US3] 创建 `tests/build/test_recovery.bats` - 测试构建失败恢复
@@ -124,16 +124,16 @@
 
 ### 实现 User Story 4
 
-- [ ] T047 [P] [US4] 创建 `.specify/scripts/debug/start-debug-server.sh` - 启动 OpenOCD
-- [ ] T048 [US4] 实现命令行参数解析（--interface, --target, --port, --daemon）
-- [ ] T049 [US4] 实现接口配置（stlink-v2, jlink, cmsis-dap）
-- [ ] T050 [US4] 实现目标配置（stm32f4x, stm32f7x）
-- [ ] T051 [US4] 实现 OpenOCD 进程管理（启动、守护进程模式）
-- [ ] T052 [P] [US4] 创建 `.specify/scripts/debug/connect-gdb.sh` - GDB 连接脚本
-- [ ] T053 [US4] 实现 GDB 自动连接到 OpenOCD（target extended-remote localhost:3333）
-- [ ] T054 [US4] 实现 --load 选项（自动加载程序到目标设备）
-- [ ] T055 [US4] 实现 --tui 选项（启用 GDB TUI 模式）
-- [ ] T056 [US4] 添加 GDB 初始化命令（monitor reset halt, load, monitor reset init）
+- [X] T047 [P] [US4] 创建 `.specify/scripts/debug/start-debug-server.sh` - 启动 OpenOCD
+- [X] T048 [US4] 实现命令行参数解析（--interface, --target, --port, --daemon）
+- [X] T049 [US4] 实现接口配置（stlink-v2, jlink, cmsis-dap）
+- [X] T050 [US4] 实现目标配置（stm32f4x, stm32f7x）
+- [X] T051 [US4] 实现 OpenOCD 进程管理（启动、守护进程模式）
+- [X] T052 [P] [US4] 创建 `.specify/scripts/debug/connect-gdb.sh` - GDB 连接脚本
+- [X] T053 [US4] 实现 GDB 自动连接到 OpenOCD（target extended-remote localhost:3333）
+- [X] T054 [US4] 实现 --load 选项（自动加载程序到目标设备）
+- [X] T055 [US4] 实现 --tui 选项（启用 GDB TUI 模式）
+- [X] T056 [US4] 添加 GDB 初始化命令（monitor reset halt, load, monitor reset init）
 - [ ] T057 [P] [US4] 创建 `tests/debug/test_debug_server.bats` - 测试调试服务器启动
 
 **Checkpoint**: 此时 User Story 4 应完全可用 - 完整的调试环境配置就绪
@@ -144,15 +144,15 @@
 
 **目的**: 示例项目、文档完善和测试覆盖
 
-- [ ] T058 [P] 创建 `.specify/templates/examples/hello-c11/main.c` - C11 特性示例程序
-- [ ] T059 [P] 创建 `.specify/templates/examples/hello-c11/CMakeLists.txt`
-- [ ] T060 [P] 创建 `.specify/templates/examples/blinky/main.c` - LED 闪烁示例
-- [ ] T061 [P] 创建 `.specify/templates/examples/blinky/startup.s` - 启动汇编文件
-- [ ] T062 [P] 创建 `.specify/templates/examples/blinky/linker.ld` - 链接器脚本示例
-- [ ] T063 [P] 创建 `.specify/templates/examples/blinky/CMakeLists.txt`
-- [ ] T064 [P] 为所有脚本添加 --help 选项和使用说明
-- [ ] T065 [P] 实现跨平台兼容性（Windows PowerShell 脚本或 WSL 说明）
-- [ ] T066 [P] 添加彩色输出支持（检测终端是否支持，提供 --no-color 选项）
+- [X] T058 [P] 创建 `.specify/templates/examples/hello-c11/main.c` - C11 特性示例程序
+- [X] T059 [P] 创建 `.specify/templates/examples/hello-c11/CMakeLists.txt`
+- [X] T060 [P] 创建 `.specify/templates/examples/blinky/main.c` - LED 闪烁示例
+- [X] T061 [P] 创建 `.specify/templates/examples/blinky/startup.s` - 启动汇编文件
+- [X] T062 [P] 创建 `.specify/templates/examples/blinky/linker.ld` - 链接器脚本示例
+- [X] T063 [P] 创建 `.specify/templates/examples/blinky/CMakeLists.txt`
+- [X] T064 [P] 为所有脚本添加 --help 选项和使用说明
+- [X] T065 [P] 实现跨平台兼容性（Windows PowerShell 脚本或 WSL 说明）
+- [X] T066 [P] 添加彩色输出支持（检测终端是否支持，提供 --no-color 选项）
 - [ ] T067 创建 `tests/integration/test_full_workflow.bats` - 端到端集成测试
 - [ ] T068 验证所有测试通过（toolchain, build, debug, integration）
 - [ ] T069 更新项目 README.md，添加快速入门链接和徽章
