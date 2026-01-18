@@ -1,0 +1,12 @@
+PROJECT_NAME           = "PLCopen Function Blocks Library"
+PROJECT_NUMBER         = 1.0.0
+OUTPUT_DIRECTORY       = build/docs
+INPUT                  = include/plcopen
+RECURSIVE              = YES
+OPTIMIZE_OUTPUT_FOR_C  = YES
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+GENERATE_LATEX         = NO
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html

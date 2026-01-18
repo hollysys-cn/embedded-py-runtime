@@ -50,7 +50,7 @@
 - [X] T011 [P] 实现输出限幅函数 clamp_output() 在 src/plcopen/common.c
 - [X] T012 为 common.c 创建单元测试 tests/plcopen/test_common.c：测试溢出检测（输入 FLT_MAX * 2）、除零保护（分母 0 和 1e-6）、NaN 检测（0.0/0.0）、Inf 检测（1.0/0.0）、限幅函数
 - [X] T013 创建 Unity 测试运行器 tests/plcopen/test_runner.c
-- [ ] T014 验证基础功能层：编译并运行 test_common.c，确保所有数值保护函数测试通过（覆盖率 > 90%）
+- [X] T014 验证基础功能层：编译并运行 test_common.c，确保所有数值保护函数测试通过（覆盖率 > 90%）
 
 **检查点**: 基础功能层就绪 - 用户故事实现现在可以并行开始
 
@@ -86,7 +86,7 @@
 - [X] T024 [US1] 创建 PID 控制演示程序 examples/plcopen/pid_control_demo/main.c（模拟一阶惯性系统的闭环控制）
 - [X] T025 [US1] 创建 PID 演示程序构建配置 examples/plcopen/pid_control_demo/CMakeLists.txt
 - [X] T026 [US1] 创建 PID 状态码测试 tests/plcopen/test_fb_pid.c：验证所有状态码输出（FB_STATUS_OK, FB_STATUS_LIMIT_HI, FB_STATUS_LIMIT_LO, FB_STATUS_ERROR_NAN, FB_STATUS_ERROR_INF）
-- [ ] T027 [US1] 验证 User Story 1：编译并运行所有 PID 测试，执行演示程序，确认控制性能达标
+- [X] T027 [US1] 验证 User Story 1：编译并运行所有 PID 测试，执行演示程序，确认控制性能达标
 
 **检查点**: 此时 User Story 1 应完全功能正常且可独立测试
 
@@ -117,7 +117,7 @@
   - 测试状态码输出（FB_STATUS_OK, FB_STATUS_ERROR_NAN, FB_STATUS_ERROR_INF）
 - [X] T033 [US2] 创建 PT1 滤波演示程序 examples/plcopen/filter_demo/main.c（输入带噪声信号，展示滤波效果）
 - [X] T034 [US2] 创建滤波演示程序构建配置 examples/plcopen/filter_demo/CMakeLists.txt
-- [ ] T035 [US2] 验证 User Story 2：编译并运行所有 PT1 测试，执行演示程序，确认滤波特性正确
+- [X] T035 [US2] 验证 User Story 2：编译并运行所有 PT1 测试，执行演示程序，确认滤波特性正确
 
 **检查点**: 此时 User Stories 1 和 2 都应独立工作正常（MVP 核心功能完成）
 
@@ -283,17 +283,17 @@
 - [X] T073 [P] 创建综合系统演示程序 examples/plcopen/full_system_demo/main.c（展示 PID + PT1 + RAMP 协同工作）
 - [X] T074 [P] 创建综合演示程序构建配置 examples/plcopen/full_system_demo/CMakeLists.txt
 - [X] T075 创建性能基准测试 tests/plcopen/test_performance.c（测量每个功能块执行时间，目标 < 10μs）
-- [ ] T076 运行性能基准测试，生成性能报告 docs/002-performance-report.md
+- [X] T076 运行性能基准测试，生成性能报告 docs/002-performance-report.md
 - [X] T077 验证内存占用：检查编译后的库大小（目标 Flash < 50KB, RAM < 2KB）
-- [ ] T078 [P] 创建用户手册 docs/plcopen-user-manual-zh.md（中文，包含所有功能块使用说明）
-- [ ] T079 [P] 为所有源文件添加 Doxygen 格式的 API 文档注释
-- [ ] T080 [P] 生成 Doxygen API 文档（如果配置了 Doxygen）
-- [ ] T081 运行代码静态分析工具 cppcheck（如果可用），修复发现的问题
-- [ ] T082 执行完整测试套件，确认所有测试通过且覆盖率 > 90%
-- [ ] T082a 使用 gcov 或类似工具生成测试覆盖率报告，输出到 docs/002-coverage-report.md（确保 SC-005 达标）
-- [ ] T083 代码审查：检查代码质量、注释完整性、圈复杂度（目标 < 10）
-- [ ] T084 运行 specs/002-plcopen-function-blocks/checklists/requirements.md 中的质量检查清单
-- [ ] T085 准备发布：更新 CHANGELOG.md，标记版本 v1.0.0，准备合并到主分支
+- [X] T078 [P] 创建用户手册 docs/plcopen-user-manual-zh.md（中文，包含所有功能块使用说明）
+- [X] T079 [P] 为所有源文件添加 Doxygen 格式的 API 文档注释
+- [X] T080 [P] 生成 Doxygen API 文档（如果配置了 Doxygen）
+- [X] T081 运行代码静态分析工具 cppcheck（如果可用），修复发现的问题
+- [X] T082 执行完整测试套件，确认所有测试通过且覆盖率 > 90%
+- [X] T082a 使用 gcov 或类似工具生成测试覆盖率报告，输出到 docs/002-coverage-report.md（确保 SC-005 达标）
+- [X] T083 代码审查：检查代码质量、注释完整性、圈复杂度（目标 < 10）
+- [X] T084 运行 specs/002-plcopen-function-blocks/checklists/requirements.md 中的质量检查清单
+- [X] T085 准备发布：更新 CHANGELOG.md，标记版本 v1.0.0，准备合并到主分支
 
 ---
 

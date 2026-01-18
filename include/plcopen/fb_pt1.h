@@ -37,11 +37,29 @@ typedef struct {
 } FB_PT1_State_t;
 
 typedef struct {
-    FB_PT1_Config_t config;
-    FB_PT1_State_t state;
+    FB_PT1_Config_t config; /**< 配置参数 */
+    FB_PT1_State_t state;   /**< 运行时状态 */
 } FB_PT1_t;
 
+/**
+ * @brief 初始化 PT1 滤波器
+ *
+ * @param fb PT1 功能块实例指针
+ * @param config 配置参数指针
+ * @return int 返回码：0=成功，-1=配置错误 (FB_STATUS_ERROR_PARAM)
+ */
 FB_Status_t FB_PT1_Init(FB_PT1_t* fb, const FB_PT1_Config_t* config);
+
+/**
+ * @brief 执行 PT1 滤波器
+ *
+ * y(k) = y(k-1) + alpha * (u(k) - y(k-1))
+ * 其中 alpha = Ts / (tau + Ts)
+ *
+ * @param fb PT1 功能块实例指针
+ * @param input 当前输入值
+ * @return float 滤波后的输出值
+ */
 float FB_PT1_Execute(FB_PT1_t* fb, float input);
 
 #ifdef __cplusplus

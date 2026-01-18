@@ -19,17 +19,34 @@ typedef struct {
 } FB_RAMP_Config_t;
 
 typedef struct {
-    float output;
-    bool first_run;
-    FB_Status_t status;
+    float output;          /**< 当前输出值 */
+    bool first_run;        /**< 首次运行标志 */
+    FB_Status_t status;    /**< 状态码 */
 } FB_RAMP_State_t;
 
 typedef struct {
-    FB_RAMP_Config_t config;
-    FB_RAMP_State_t state;
+    FB_RAMP_Config_t config; /**< 配置参数 */
+    FB_RAMP_State_t state;   /**< 运行时状态 */
 } FB_RAMP_t;
 
+/**
+ * @brief 初始化 RAMP 斜坡发生器
+ *
+ * @param fb RAMP 功能块实例指针
+ * @param config 配置参数指针
+ * @return int 返回码：0=成功，-1=配置错误
+ */
 int FB_RAMP_Init(FB_RAMP_t* fb, const FB_RAMP_Config_t* config);
+
+/**
+ * @brief 执行 RAMP 斜坡发生器
+ *
+ * 根据上升/下降速率限制输出向目标值逼近。
+ *
+ * @param fb RAMP 功能块实例指针
+ * @param target 目标值
+ * @return float 当前输出值
+ */
 float FB_RAMP_Execute(FB_RAMP_t* fb, float target);
 
 #ifdef __cplusplus
