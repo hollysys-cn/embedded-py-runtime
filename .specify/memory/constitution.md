@@ -1,50 +1,73 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+同步影响报告 (Sync Impact Report):
+- 版本变更: 1.0.0 → 1.1.0 (内容中文化)
+- 修改的原则: 所有原则内容完全中文化，保持语义不变
+- 新增章节: 无
+- 模板更新: ✅ 无需更新（模板为通用结构）
+-->
 
-## Core Principles
+# Embedded Python Runtime 项目章程
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+## 核心原则
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### 一、本土化与语言
+开发过程和软件主要面向中国大陆用户。所有文档、推理过程、代码注释、系统接口和用户界面文本**必须**优先使用简体中文。
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+**理由**: 降低团队沟通成本，提升用户体验，确保技术文档的可读性和可维护性。
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### 二、架构与设计
+遵循 SOLID 原则，采用模块化设计。为所有模块和接口提供清晰易懂的设计文档。适当使用常见设计模式，但**严格避免过度设计**。设计**必须**简洁、实用，并优先考虑人类可读性和理解性。
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+**理由**: 保证代码的长期可维护性和团队协作效率，避免复杂度失控。
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### 三、架构约束
+充分利用现有代码架构。除非有充分理由或创建全新项目组件，**禁止**修改现有文件目录结构。保持结构布局的稳定性。
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+**理由**: 降低重构风险，保护已有投资，减少团队成员的认知负担。
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### 四、环境与配置
+开发环境和相关工具**应该**自动安装和配置，以最小化设置时间。**不得**污染本地计算机环境；所有变更和配置**必须**限定在当前工作空间范围内（例如：使用项目内的 `.env` 文件配置环境变量）。
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+**理由**: 提升开发环境的可复现性，避免"在我机器上能跑"的问题，便于新成员快速上手。
 
-## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+### 五、工程实践与开发体验
+结合开源社区最佳实践和现代软件工程标准。**必须**确保在 Windows、Linux 和 MacOS 平台上的开发体验一致，包括工具选择，以降低认知负担并提升开发效率。
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+**理由**: 跨平台一致性减少平台切换成本，提升团队整体生产力。
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+### 六、依赖管理
+开发依赖包和工具**必须**优先从国内镜像源获取（例如阿里云镜像站 https://developer.aliyun.com/mirror/），以确保下载速度。引入任何新的第三方依赖时，**必须**及时提示进行人工确认。
+
+**理由**: 提升构建速度，避免网络问题导致的开发中断；人工确认机制防止依赖膨胀。
+
+### 七、许可合规
+第三方依赖包**必须**是开源且对商业应用友好的。优先选择 MIT 或 Apache 协议。涉及其他协议（如 GPL、AGPL）的依赖**必须**经过明确的人工审核和批准方可使用。
+
+**理由**: 规避法律风险，保护商业应用的合规性。
+
+### 八、代码质量
+保持高代码质量，确保注释和文档完善。监控并限制圈复杂度，最大化代码复用。系统**必须**具备良好的可测试性，同时关注用户体验和系统性能。文件编码**必须**使用 UTF-8，换行符**必须**使用 Linux 格式（LF）。
+
+**理由**: 提升代码可维护性、可测试性和团队协作效率；统一编码规范避免跨平台问题。
+
+### 九、修改范围
+在修复 Bug 或添加新功能时，变更范围**必须**最小化。避免修改不相关的模块，以防止回归问题和不必要的复杂性。
+
+**理由**: 降低变更风险，提升代码审查效率，减少潜在的副作用。
+
+## 治理规则
+
+### 配置优先级
+如果本章程中的任何原则与现有项目配置冲突，**以现有项目配置为准**。
+
+### 修订流程
+本章程取代临时性实践。任何修订需要更新本文件（`.specify/memory/constitution.md`）并递增版本号。对本文档的所有变更必须反映到项目的规划和验证工件中。
+
+### 版本管理
+采用语义化版本控制（Semantic Versioning）：
+- **MAJOR（主版本）**: 不向后兼容的治理/原则删除或重新定义
+- **MINOR（次版本）**: 新增原则/章节或重大扩展
+- **PATCH（补丁版本）**: 澄清说明、措辞优化、错别字修复等非语义改进
+
+**版本**: 1.1.0 | **批准日期**: 2026-01-18 | **最后修订**: 2026-01-18
+
