@@ -346,3 +346,20 @@ build/
 # Environment files
 .env*
 !.env.example
+
+### C/C++ & CMake ###
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.exe
+*.out
+*.app
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+Testing/
+CPackConfig.cmake
+CPackSourceConfig.cmake
