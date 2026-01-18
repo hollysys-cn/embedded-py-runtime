@@ -331,8 +331,8 @@ main() {
     log_success "工具链安装完成: $full_install_path"
     log_info ""
     log_info "下一步:"
-    log_info "  1. 运行验证脚本: .specify/scripts/setup/verify-toolchain.sh"
-    log_info "  2. 配置环境: source .specify/scripts/setup/configure-environment.sh"
+    log_info "  1. 运行验证脚本: scripts/setup/verify-toolchain.sh"
+    log_info "  2. 配置环境: source scripts/setup/configure-environment.sh"
 
     return 0
 }

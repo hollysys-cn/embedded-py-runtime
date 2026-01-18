@@ -7,7 +7,7 @@
 # 编码: UTF-8
 # 换行符: LF
 #
-# 用法: source .specify/scripts/setup/configure-environment.sh
+# 用法: source scripts/setup/configure-environment.sh
 
 # 注意：此脚本必须使用 source 或 . 执行
 
