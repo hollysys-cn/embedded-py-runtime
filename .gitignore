@@ -325,3 +325,24 @@ docker-compose.override.yml
 build/
 *.lock
 .build-state.json
+
+# Additional C/C++ patterns
+*.elf
+*.hex
+*.bin
+*.map
+*.lst
+*.su
+*.d
+*.i
+*.s
+
+# IDE specific
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment files
+.env*
+!.env.example
