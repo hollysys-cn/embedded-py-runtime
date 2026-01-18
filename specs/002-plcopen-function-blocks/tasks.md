@@ -140,7 +140,7 @@
   - 选择对应速率
   - 线性逼近目标：output += rate * sample_time
   - 到达目标时停止变化
-- [ ] T041 [US3] 创建 RAMP 功能块单元测试 tests/plcopen/test_fb_ramp.c：
+- [X] T041 [US3] 创建 RAMP 功能块单元测试 tests/plcopen/test_fb_ramp.c：
   - 测试配置验证：rate <= 0、sample_time <= 0 或 > 1000s
   - 测试上升斜坡（速率和时间）
   - 测试下降斜坡
@@ -148,7 +148,7 @@
   - 测试不对称速率（上升快下降慢）
   - 测试首次调用行为
   - 测试状态码输出
-- [ ] T042 [US3] 验证 User Story 3：编译并运行所有 RAMP 测试，确认斜坡特性正确
+- [X] T042 [US3] 验证 User Story 3：编译并运行所有 RAMP 测试，确认斜坡特性正确
 
 **检查点**: 此时 User Stories 1、2 和 3 都应独立工作正常
 
@@ -170,14 +170,14 @@
   - 检查输入是否超出范围
   - 限幅到 [min, max]
   - 设置状态标志（HI_LIM/LO_LIM/OK）
-- [ ] T048 [US4] 创建 LIMIT 功能块单元测试 tests/plcopen/test_fb_limit.c：
+- [X] T048 [US4] 创建 LIMIT 功能块单元测试 tests/plcopen/test_fb_limit.c：
   - 测试配置验证：max <= min
   - 测试上限限幅（状态 FB_STATUS_LIMIT_HI）
   - 测试下限限幅（状态 FB_STATUS_LIMIT_LO）
   - 测试正常范围（状态 FB_STATUS_OK，无限幅）
   - 测试边界值（精确等于 min 或 max）
   - 测试首次调用行为
-- [ ] T049 [US4] 验证 User Story 4：编译并运行所有 LIMIT 测试，确认限幅逻辑正确
+- [X] T049 [US4] 验证 User Story 4：编译并运行所有 LIMIT 测试，确认限幅逻辑正确
 
 **检查点**: 此时 User Stories 1-4 都应独立工作正常
 
@@ -199,7 +199,7 @@
   - 计算输入与中心值的偏差
   - 如果偏差 <= width，输出保持中心值
   - 如果偏差 > width，输出跟随输入
-- [ ] T055 [US5] 创建 DEADBAND 功能块单元测试 tests/plcopen/test_fb_deadband.c：
+- [X] T055 [US5] 创建 DEADBAND 功能块单元测试 tests/plcopen/test_fb_deadband.c：
   - 测试配置验证：width < 0
   - 测试死区内信号（输出不变）
   - 测试死区外信号（输出跟随）
@@ -207,7 +207,7 @@
   - 测试零死区宽度（直通模式）
   - 测试首次调用行为
   - 测试状态码输出
-- [ ] T056 [US5] 验证 User Story 5：编译并运行所有 DEADBAND 测试，确认死区逻辑正确
+- [X] T056 [US5] 验证 User Story 5：编译并运行所有 DEADBAND 测试，确认死区逻辑正确
 
 **检查点**: 此时 User Stories 1-5 都应独立工作正常
 
@@ -230,7 +230,7 @@
   - 输出限幅（如果配置）
   - 设置限幅状态标志
 - [X] T062 [US6] 实现 FB_INTEGRATOR_Reset() 复位函数在 src/plcopen/fb_integrator.c（归零积分值）
-- [ ] T063 [US6] 创建 INTEGRATOR 功能块单元测试 tests/plcopen/test_fb_integrator.c：
+- [X] T063 [US6] 创建 INTEGRATOR 功能块单元测试 tests/plcopen/test_fb_integrator.c：
   - 测试配置验证：sample_time <= 0 或 > 1000s, out_max <= out_min（如启用限幅）
   - 测试恒定输入累积（线性增长）
   - 测试复位功能
@@ -238,7 +238,7 @@
   - 测试首次调用行为（积分值从0开始）
   - 测试数值保护（溢出、NaN/Inf 输入）
   - 测试状态码输出
-- [ ] T064 [US6] 验证 User Story 6：编译并运行所有 INTEGRATOR 测试，确认积分逻辑正确
+- [X] T064 [US6] 验证 User Story 6：编译并运行所有 INTEGRATOR 测试，确认积分逻辑正确
 
 **检查点**: 此时 User Stories 1-6 都应独立工作正常
 
@@ -261,7 +261,7 @@
   - 一阶滤波（如果配置）：output = output + alpha * (d - output)
   - 更新前一采样值
   - 首次运行：输出 0（避免跳变）
-- [ ] T070 [US7] 创建 DERIVATIVE 功能块单元测试 tests/plcopen/test_fb_derivative.c：
+- [X] T070 [US7] 创建 DERIVATIVE 功能块单元测试 tests/plcopen/test_fb_derivative.c：
   - 测试配置验证：sample_time <= 0 或 > 1000s, filter_time_constant < 0
   - 测试斜坡输入（恒定输出）
   - 测试阶跃输入（平滑脉冲而非无穷大尖峰）
@@ -269,7 +269,7 @@
   - 测试首次调用行为（输出0，避免初始尖峰）
   - 测试数值保护（NaN/Inf 输入）
   - 测试状态码输出
-- [ ] T071 [US7] 验证 User Story 7：编译并运行所有 DERIVATIVE 测试，确认微分逻辑正确
+- [X] T071 [US7] 验证 User Story 7：编译并运行所有 DERIVATIVE 测试，确认微分逻辑正确
 
 **检查点**: 所有用户故事（1-7）现在应该独立功能正常
 

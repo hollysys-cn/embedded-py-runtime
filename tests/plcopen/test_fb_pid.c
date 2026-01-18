@@ -189,15 +189,10 @@ void test_pid_derivative_on_measurement(void) {
     /* 首次调用 */
     FB_PID_Execute(&pid, 50.0f, 30.0f);
 
-    /* 测量值变化 */
-    float prev_measurement = 30.0f;
-    float new_measurement = 35.0f;
-
-    float output = FB_PID_Execute(&pid, 50.0f, new_measurement);
+    /* 测量值变化: 从 30.0 到 35.0 */
+    float output = FB_PID_Execute(&pid, 50.0f, 35.0f);
 
     /* 微分项 = -Kd * (new_meas - prev_meas) / Ts = -0.05 * (35-30) / 0.01 = -25.0 */
-    float expected_d = -config.kd * (new_measurement - prev_measurement) / config.sample_time;
-
     /* 输出 = 微分项 = -25.0，但被限制在 [0, 100]，所以输出 = 0.0 */
     ASSERT_FLOAT_IN_RANGE(0.0f, output, FLOAT_TOLERANCE);
 }
