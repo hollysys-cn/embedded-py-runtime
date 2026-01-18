@@ -106,11 +106,11 @@
 
 ---
 
-## Phase 6: User Story 4 - 积分计量与累计量演示 (Priority: P3)
+## Phase 6: User Story 4 - 积分/微分演示 (Priority: P3)
 
-**Goal**: 实现积分器累计量演示，模拟流量统计
+**Goal**: 实现积分器累计量和微分器变化率演示，模拟流量统计和速度计算
 
-**Independent Test**: 运行 `./integrator_demo > output.csv`，验证积分值线性增加，复位功能正常
+**Independent Test**: 运行 `./integrator_demo > output.csv`，验证积分值线性增加、微分值稳定、复位功能正常
 
 ### Implementation for User Story 4
 
@@ -125,7 +125,7 @@
   - 输出 CSV 格式数据
 - [ ] T024 [US4] 验证编译无警告并运行测试
 
-**Checkpoint**: User Story 4 完成，积分器演示可独立运行
+**Checkpoint**: User Story 4 完成，积分器/微分器演示可独立运行
 
 ---
 
@@ -180,7 +180,7 @@
 | US1 (PID 闭环) | Phase 2 完成 | 独立 |
 | US2 (斜坡限幅) | Phase 2 完成 | 与 US1 并行 |
 | US3 (信号处理链) | Phase 2 完成 | 与 US1/US2 并行 |
-| US4 (积分器) | Phase 2 完成 | 与 US1-3 并行 |
+| US4 (积分/微分) | Phase 2 完成 | 与 US1-3 并行 |
 | US5 (综合系统) | Phase 2 完成 | 与 US1-4 并行 |
 
 ### Within Each User Story
@@ -278,7 +278,7 @@ Task: T020 验证
 | US1 | `./pid_control_demo > out.csv && head -20 out.csv` 检查温度收敛 |
 | US2 | `./ramp_limit_demo > out.csv` 检查斜坡线性和限幅 |
 | US3 | `./filter_demo > out.csv` 检查噪声衰减 |
-| US4 | `./integrator_demo > out.csv` 检查积分值线性增长 |
+| US4 | `./integrator_demo > out.csv` 检查积分线性增长和微分变化率 |
 | US5 | `./full_system_demo > out.csv` 检查综合控制效果 |
 
 ---

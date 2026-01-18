@@ -149,6 +149,11 @@ typedef struct {
 
 /* PT1 滤波参数 */
 #define PT1_TIME_CONST      0.5f    /**< 滤波时间常数（秒） */
+
+/* 手动/自动模式切换时机（周期数） */
+#define MODE_SWITCH_TO_MANUAL  150  /**< 第 150 周期切换到手动模式 */
+#define MODE_SWITCH_TO_AUTO    170  /**< 第 170 周期切回自动模式 */
+#define MANUAL_OUTPUT          50.0f /**< 手动模式输出值（%） */
 ```
 
 ---
@@ -157,12 +162,19 @@ typedef struct {
 
 **用途**: 提供统一的 CSV 输出格式宏定义。
 
+**编码规范**: 所有 CSV 输出使用 **UTF-8 无 BOM** 编码，直接通过 printf 输出到 stdout。
+
+**错误处理约定**:
+- 初始化函数返回 `int` 类型：`0` 表示成功，`-1` 表示配置无效
+- 配置无效时通过 `fprintf(stderr, "...")` 输出警告信息
+- 配置无效时自动使用安全默认值继续运行
+
 **结构定义**:
 
 ```c
 /**
  * @file csv_output.h
- * @brief CSV 输出格式定义
+ * @brief CSV 输出格式定义（UTF-8 无 BOM 编码）
  */
 
 /* PID 控制演示 CSV 格式 */
